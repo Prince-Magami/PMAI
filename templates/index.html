@@ -3,49 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PMAI - Prince Magami AI</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
-  <script defer src="/static/typing.js"></script>
+  <title>PMAI - Home</title>
+  <link rel="stylesheet" href="./static/css/style.css" />
+  <script defer src="./static/js/home.js"></script>
 </head>
 <body>
   <header class="navbar">
     <div class="logo">PMAI</div>
     <nav>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/chat">Chat</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="chat.html">Chat</a></li>
+        <li><a href="about.html">About</a></li>
       </ul>
     </nav>
   </header>
 
-  <section class="hero">
-    <h1>PMAI</h1>
-    <p id="typing-text">Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips</p>
-  </section>
+  <main class="landing">
+    <section class="hero">
+      <h1 class="animated-logo">PMAI</h1>
+      <p class="subtitle">Chatbox • Scam Detector • Study Guide • Cyber Tips</p>
+    </section>
 
-  <section class="mode-cards">
-    <div class="card blue">
-      <h3>Chatbox</h3>
-      <p>Ask anything. Get casual or informative responses instantly with flair.</p>
-    </div>
-    <div class="card red">
-      <h3>Email/Link Scanner</h3>
-      <p>Paste any suspicious link or message. We’ll scan and alert you with a threat score.</p>
-    </div>
-    <div class="card green">
-      <h3>Academic Assistant</h3>
-      <p>Study smarter. Get study tips, past questions, and reading help instantly.</p>
-    </div>
-    <div class="card purple">
-      <h3>Cybersecurity Tips</h3>
-      <p>Stay safe online with regular cyber hygiene tips and smart online practices.</p>
-    </div>
-  </section>
+    <section class="modes-grid">
+      <div class="mode-card chatbox">
+        <h2>Chatbox</h2>
+        <p>Talk casually with PMAI like ChatGPT. Ask anything, anytime.</p>
+      </div>
+      <div class="mode-card scam">
+        <h2>Email/Link Scanner</h2>
+        <p>Paste suspicious links or emails and get real-time scan results.</p>
+      </div>
+      <div class="mode-card academic">
+        <h2>Academic Assistant</h2>
+        <p>Get help with reading tips, study guides, and exam resources.</p>
+      </div>
+      <div class="mode-card cyber">
+        <h2>Cyber Tips</h2>
+        <p>Learn cyber hygiene and security tips in simple language.</p>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT Showcase | All rights reserved © 2025</p>
+    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved &copy; 2025</p>
   </footer>
 </body>
 </html>
