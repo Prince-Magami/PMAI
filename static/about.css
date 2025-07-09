@@ -1,0 +1,57 @@
+/* about.css - About Page Styling for PMAI */
+
+.about-container {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: auto;
+  color: #e8e8e8;
+  line-height: 1.7;
+}
+
+.about-container h1 {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: #00ffc8;
+  animation: fadeIn 2s ease;
+}
+
+.about-container h2 {
+  font-size: 1.6rem;
+  margin-top: 2rem;
+  color: #00e6b8;
+}
+
+.about-container p {
+  font-size: 1.05rem;
+  margin-top: 0.8rem;
+  text-align: justify;
+}
+
+.highlight {
+  color: #00ffc8;
+  font-weight: bold;
+}
+
+ul.feature-list {
+  list-style: square;
+  margin-top: 0.5rem;
+  padding-left: 1.4rem;
+}
+
+ul.feature-list li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+/* Reuse animation from global */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
