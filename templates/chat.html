@@ -3,50 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat - PMAI</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <script defer src="/static/chat.js"></script>
+  <title>PMAI - Chat</title>
+  <link rel="stylesheet" href="./static/css/chat.css" />
+  <script defer src="./static/js/chat.js"></script>
 </head>
 <body>
   <header class="navbar">
     <div class="logo">PMAI</div>
     <nav>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/chat" class="active">Chat</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="chat.html" class="active">Chat</a></li>
+        <li><a href="about.html">About</a></li>
       </ul>
     </nav>
   </header>
 
-  <main class="chat-container">
+  <main class="chat-wrapper">
     <div class="controls">
-      <select id="mode-selector">
-        <option value="chat">Chatbox</option>
-        <option value="scan">Email/Link Scanner</option>
+      <select id="mode">
+        <option value="chat" selected>Chatbox</option>
+        <option value="scam">Email/Link Scanner</option>
         <option value="edu">Academic Assistant</option>
-        <option value="cyber">Cybersecurity Tips</option>
+        <option value="cyber">Cyber Tips</option>
       </select>
-      <select id="language-toggle">
+      <select id="language">
         <option value="english" selected>English</option>
         <option value="pidgin">Pidgin</option>
       </select>
     </div>
 
-    <div id="chat-window" class="chat-window">
-      <!-- Chat messages go here -->
-    </div>
+    <div id="chat-log" class="chat-log"></div>
 
     <form id="chat-form" class="chat-form">
-      <textarea id="chat-input" placeholder="Ask something..." rows="1"></textarea>
-      <button id="send-btn" type="submit">
-        <img src="/static/send-icon.svg" alt="Send" />
+      <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+      <button type="submit" class="send-btn">
+        <img src="./static/assets/send-icon.svg" alt="Send" />
       </button>
     </form>
   </main>
 
   <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT Showcase | All rights reserved © 2025</p>
+    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved &copy; 2025</p>
   </footer>
 </body>
 </html>
