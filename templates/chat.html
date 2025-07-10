@@ -1,50 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PMAI - Chat</title>
-  <link rel="stylesheet" href="./static/css/chat.css" />
-  <script defer src="./static/js/chat.js"></script>
-</head>
-<body>
-  <header class="navbar">
-    <div class="logo">PMAI</div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="chat.html" class="active">Chat</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat | PMAI</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/chat.css" />
+    <script defer src="/js/chat.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-left"><a href="/">PMAI</a></div>
+      <div class="nav-right">
+        <a href="/">Home</a>
+        <a href="/chat.html" class="active">Chat</a>
+        <a href="/about.html">About</a>
+      </div>
     </nav>
-  </header>
 
-  <main class="chat-wrapper">
-    <div class="controls">
-      <select id="mode">
-        <option value="chat" selected>Chatbox</option>
-        <option value="scam">Email/Link Scanner</option>
+    <section class="mode-bar">
+      <label for="mode-select">Mode:</label>
+      <select id="mode-select">
+        <option value="chat">Chatbox</option>
+        <option value="scan">Email/Link Scanner</option>
         <option value="edu">Academic Assistant</option>
-        <option value="cyber">Cyber Tips</option>
+        <option value="cyber">Cybersecurity Tips</option>
       </select>
-      <select id="language">
+
+      <label for="lang-toggle">Language:</label>
+      <select id="lang-toggle">
         <option value="english" selected>English</option>
         <option value="pidgin">Pidgin</option>
       </select>
-    </div>
+    </section>
 
-    <div id="chat-log" class="chat-log"></div>
+    <main class="chat-container">
+      <div id="chat-thread" class="chat-thread">
+        <!-- Chat messages will go here -->
+      </div>
 
-    <form id="chat-form" class="chat-form">
-      <textarea id="chat-input" placeholder="Type your message..." rows="1"></textarea>
-      <button type="submit" class="send-btn">
-        <img src="./static/assets/send-icon.svg" alt="Send" />
-      </button>
-    </form>
-  </main>
+      <form id="chat-form" class="chat-form">
+        <textarea
+          id="chat-input"
+          placeholder="Ask something..."
+          rows="1"
+          required
+        ></textarea>
+        <button type="submit" class="send-btn">
+          <img src="/assets/send-icon.svg" alt="Send" />
+        </button>
+      </form>
+    </main>
 
-  <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved &copy; 2025</p>
-  </footer>
-</body>
+    <footer>
+      <p>
+        Prince Magami | magamiabu@gmail.com | 3MTT Fellow ID: [Insert ID] | All
+        Rights Reserved
+      </p>
+    </footer>
+  </body>
 </html>
