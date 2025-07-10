@@ -1,52 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PMAI - Home</title>
-  <link rel="stylesheet" href="./static/css/style.css" />
-  <script defer src="./static/js/home.js"></script>
+  <meta charset="UTF-8">
+  <title>PMAI – Prince Magami AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="icon" href="assets/logo.png">
 </head>
 <body>
-  <header class="navbar">
+
+  <!-- 🌐 NAVIGATION -->
+  <nav class="navbar">
     <div class="logo">PMAI</div>
-    <nav>
-      <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="chat.html">Chat</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
-    </nav>
-  </header>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="chat.html">Chat</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
 
-  <main class="landing">
-    <section class="hero">
-      <h1 class="animated-logo">PMAI</h1>
-      <p class="subtitle">Chatbox • Scam Detector • Study Guide • Cyber Tips</p>
-    </section>
+  <!-- 🎉 HERO SECTION -->
+  <section class="hero">
+    <h1 class="animated-text">Prince Magami AI</h1>
+    <p class="subtitle">Chatbox | Email Scanner | Academic Assistant | Cyber Tips</p>
+  </section>
 
-    <section class="modes-grid">
-      <div class="mode-card chatbox">
-        <h2>Chatbox</h2>
-        <p>Talk casually with PMAI like ChatGPT. Ask anything, anytime.</p>
-      </div>
-      <div class="mode-card scam">
-        <h2>Email/Link Scanner</h2>
-        <p>Paste suspicious links or emails and get real-time scan results.</p>
-      </div>
-      <div class="mode-card academic">
-        <h2>Academic Assistant</h2>
-        <p>Get help with reading tips, study guides, and exam resources.</p>
-      </div>
-      <div class="mode-card cyber">
-        <h2>Cyber Tips</h2>
-        <p>Learn cyber hygiene and security tips in simple language.</p>
-      </div>
-    </section>
-  </main>
+  <!-- 📇 MODES EXPLAINED -->
+  <section class="cards-container">
+    <div class="card chatbox">
+      <h3>Chatbox</h3>
+      <p>Talk casually with PMAI on any topic. Fun, fast and witty.</p>
+    </div>
+    <div class="card scanner">
+      <h3>Email/Link Scanner</h3>
+      <p>Paste emails or links. PMAI scans for scam threats with clear feedback.</p>
+    </div>
+    <div class="card academic">
+      <h3>Academic Assistant</h3>
+      <p>Get academic help, study tips or WAEC/JAMB past questions.</p>
+    </div>
+    <div class="card cyber">
+      <h3>Cyber Tips</h3>
+      <p>Daily cyber tips, awareness advice and best practices simplified.</p>
+    </div>
+  </section>
 
+  <!-- 🔗 CTA BUTTON -->
+  <div class="center">
+    <a href="chat.html" class="cta-button">Try PMAI Now →</a>
+  </div>
+
+  <!-- 📩 FOOTER -->
   <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved &copy; 2025</p>
+    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT-0725 | © 2025 All Rights Reserved</p>
   </footer>
+
+  <script src="js/typing.js"></script>
+
 </body>
 </html>
