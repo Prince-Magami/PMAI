@@ -42,7 +42,7 @@ chatInput.addEventListener("keydown", (e) => {
 async function fetchReply(message) {
   addMessage("assistant", "<span class='typing'>Typing...</span>");
   try {
-    const res = await fetch("https://pmai-api.onrender.com/api/chat", {
+    const res = await fetch("https://pmai-1.onrender.com/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message, mode: currentMode, lang: currentLang }),
