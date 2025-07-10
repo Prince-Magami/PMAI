@@ -1,62 +1,53 @@
+<!-- chat.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat | PMAI</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/chat.css" />
-    <script defer src="/js/chat.js"></script>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <title>PMAI Chat</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <script defer src="./js/chat.js"></script>
+    <script defer src="./js/typing.js"></script>
+</head>
+<body>
+    <!-- 🌐 Navigation Bar -->
     <nav class="navbar">
-      <div class="nav-left"><a href="/">PMAI</a></div>
-      <div class="nav-right">
-        <a href="/">Home</a>
-        <a href="/chat.html" class="active">Chat</a>
-        <a href="/about.html">About</a>
-      </div>
+        <img src="./assets/logo.png" alt="PMAI Logo" class="logo">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="chat.html" class="active">Chat</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
     </nav>
 
-    <section class="mode-bar">
-      <label for="mode-select">Mode:</label>
-      <select id="mode-select">
-        <option value="chat">Chatbox</option>
-        <option value="scan">Email/Link Scanner</option>
-        <option value="edu">Academic Assistant</option>
-        <option value="cyber">Cybersecurity Tips</option>
-      </select>
-
-      <label for="lang-toggle">Language:</label>
-      <select id="lang-toggle">
-        <option value="english" selected>English</option>
-        <option value="pidgin">Pidgin</option>
-      </select>
+    <!-- 💬 Mode and Language Selection -->
+    <section class="selectors">
+        <select id="mode">
+            <option value="chat">Chatbox</option>
+            <option value="scan">Email/Link Scanner</option>
+            <option value="edu">Academic Assistant</option>
+            <option value="cyber">Cybersecurity Tips</option>
+        </select>
+        <select id="lang">
+            <option value="english">English</option>
+            <option value="pidgin">Pidgin</option>
+        </select>
     </section>
 
-    <main class="chat-container">
-      <div id="chat-thread" class="chat-thread">
-        <!-- Chat messages will go here -->
-      </div>
+    <!-- 🧠 Chat Window -->
+    <section id="chat-container">
+        <div id="chat-window">
+            <!-- Messages will appear here -->
+        </div>
+        <form id="chat-form">
+            <textarea id="chat-input" placeholder="Type your message here... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
+            <button id="send-btn" type="submit">Send</button>
+        </form>
+    </section>
 
-      <form id="chat-form" class="chat-form">
-        <textarea
-          id="chat-input"
-          placeholder="Ask something..."
-          rows="1"
-          required
-        ></textarea>
-        <button type="submit" class="send-btn">
-          <img src="/assets/send-icon.svg" alt="Send" />
-        </button>
-      </form>
-    </main>
-
+    <!-- 📩 Footer -->
     <footer>
-      <p>
-        Prince Magami | magamiabu@gmail.com | 3MTT Fellow ID: [Insert ID] | All
-        Rights Reserved
-      </p>
+        <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved</p>
     </footer>
-  </body>
+</body>
 </html>
