@@ -1,71 +1,53 @@
+<!-- chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PMAI | Chat</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/animations.css" />
-  <link rel="icon" href="/assets/logo.png" />
+    <meta charset="UTF-8">
+    <title>PMAI Chat</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <script defer src="./js/chat.js"></script>
+    <script defer src="./js/typing.js"></script>
 </head>
-<body class="chat-bg">
-  <!-- ✅ NAVIGATION -->
-  <nav class="navbar">
-    <div class="logo-area">
-      <img src="/assets/logo.png" alt="PMAI Logo" class="nav-logo" />
-      <span class="site-title">PMAI</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="/chat.html" class="active">Chat</a></li>
-      <li><a href="/about.html">About</a></li>
-    </ul>
-  </nav>
+<body>
+    <!-- 🌐 Navigation Bar -->
+    <nav class="navbar">
+        <img src="./assets/logo.png" alt="PMAI Logo" class="logo">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="chat.html" class="active">Chat</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
 
-  <!-- 🧠 MODE SELECTOR -->
-  <section class="selector-wrapper">
-    <div class="mode-selector">
-      <label for="mode">AI Mode:</label>
-      <select id="mode">
-        <option value="chat" selected>Chatbox</option>
-        <option value="scan">Email/Link Scanner</option>
-        <option value="edu">Academic Assistant</option>
-        <option value="cyber">Cybersecurity Tips</option>
-      </select>
-    </div>
+    <!-- 💬 Mode and Language Selection -->
+    <section class="selectors">
+        <select id="mode">
+            <option value="chat">Chatbox</option>
+            <option value="scan">Email/Link Scanner</option>
+            <option value="edu">Academic Assistant</option>
+            <option value="cyber">Cybersecurity Tips</option>
+        </select>
+        <select id="lang">
+            <option value="english">English</option>
+            <option value="pidgin">Pidgin</option>
+        </select>
+    </section>
 
-    <div class="lang-selector">
-      <label for="lang">Language:</label>
-      <select id="lang">
-        <option value="english" selected>English</option>
-        <option value="pidgin">Pidgin</option>
-      </select>
-    </div>
-  </section>
+    <!-- 🧠 Chat Window -->
+    <section id="chat-container">
+        <div id="chat-window">
+            <!-- Messages will appear here -->
+        </div>
+        <form id="chat-form">
+            <textarea id="chat-input" placeholder="Type your message here... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
+            <button id="send-btn" type="submit">Send</button>
+        </form>
+    </section>
 
-  <!-- 💬 CHAT WINDOW -->
-  <main class="chat-container">
-    <div id="chat-window" class="chat-window"></div>
-
-    <!-- 📥 INPUT BAR -->
-    <form id="chat-form" class="chat-form">
-      <textarea
-        id="chat-input"
-        placeholder="Type your message here..."
-        rows="1"
-        required
-      ></textarea>
-      <button type="submit" id="send-btn">➤</button>
-    </form>
-  </main>
-
-  <!-- 🔗 FOOTER -->
-  <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT-GEN-AI | All rights reserved &copy; 2025</p>
-  </footer>
-
-  <!-- 💡 JS -->
-  <script src="/js/chat.js" defer></script>
-  <script src="/js/typing.js" defer></script>
+    <!-- 📩 Footer -->
+    <footer>
+        <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved</p>
+    </footer>
 </body>
 </html>
