@@ -1,130 +1,190 @@
-/* Global Styles */
-body {
+/* styles.css - Global styling for PMAI */
+
+/* Global Reset & Fonts */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f9;
-  color: #222;
   scroll-behavior: smooth;
 }
 
-.navbar {
+body {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+nav {
+  background-color: #111;
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
-  color: white;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
-
-.navbar .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 2px;
+nav h1 {
+  font-size: 1.8rem;
+  color: #00ffff;
+  animation: glow 2s infinite alternate;
 }
-
-.navbar ul {
-  list-style: none;
+nav ul {
   display: flex;
   gap: 1.5rem;
-  margin: 0;
+  list-style: none;
 }
-
-.navbar a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-}
-
-.navbar a.active {
-  text-decoration: underline;
-}
-
-.footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.9rem;
-  background-color: #2c3e50;
+nav ul li a {
   color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+nav ul li a:hover {
+  color: #00ffff;
 }
 
-/* Hero Section */
-.hero {
+/* Footer */
+footer {
+  background-color: #111;
+  padding: 1rem;
   text-align: center;
-  padding: 6rem 1rem 2rem;
-  background: linear-gradient(to right, #43cea2, #185a9d);
-  color: white;
+  color: #aaa;
+  margin-top: auto;
+  font-size: 0.9rem;
 }
 
-.animated-logo {
+/* Landing Page */
+.landing {
+  text-align: center;
+  padding: 5rem 2rem;
+}
+.landing h1 {
   font-size: 4rem;
-  font-weight: 800;
-  animation: fadeIn 1.2s ease-out;
+  color: #00ffff;
+  animation: fadeInDown 2s ease;
 }
-
-.subtitle {
+.landing p {
   font-size: 1.2rem;
-  margin-top: 0.5rem;
-  font-style: italic;
+  color: #eee;
+  margin-top: 1rem;
+  animation: fadeInUp 2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.modes-grid {
+/* Mode Cards */
+.modes-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  padding: 2rem;
+  padding: 3rem 2rem;
 }
-
-.mode-card {
+.card {
+  background-color: #1c1c1e;
+  border-radius: 12px;
   padding: 1.5rem;
-  border-radius: 1rem;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
+  transition: transform 0.3s, background 0.3s;
+  border-left: 5px solid #00ffff;
 }
-
-.mode-card:hover {
-  transform: translateY(-5px);
+.card:hover {
+  transform: scale(1.03);
+  background: #292b2f;
 }
-
-.chatbox { background-color: #f1f8ff; border-left: 5px solid #3498db; }
-.scam { background-color: #fff0f0; border-left: 5px solid #e74c3c; }
-.academic { background-color: #f6fff0; border-left: 5px solid #2ecc71; }
-.cyber { background-color: #fcf8ff; border-left: 5px solid #9b59b6; }
-
-.mode-card h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.3rem;
+.card h2 {
+  margin-bottom: 1rem;
+  color: #00ffff;
+  font-size: 1.5rem;
 }
-
-.mode-card p {
+.card p {
   font-size: 1rem;
-  line-height: 1.5;
+  color: #ccc;
 }
 
-.about-content {
-  max-width: 800px;
-  margin: 4rem auto;
+/* Chat UI */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
   padding: 2rem;
-  background: #fff;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-
-.about-content h1 {
-  font-size: 2rem;
+.mode-select {
+  display: flex;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background: #222;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.message {
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  max-width: 75%;
+}
+.message.user {
+  background-color: #444;
+  align-self: flex-end;
+}
+.message.ai {
+  background-color: #00ffff22;
+  align-self: flex-start;
+  color: #fff;
+}
+#chat-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+#chat-input {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+#send-btn {
+  background: #00ffff;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-.about-content p,
-.about-content ul {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00ffff;
+  }
+  to {
+    text-shadow: 0 0 20px #00ffff;
+  }
 }
