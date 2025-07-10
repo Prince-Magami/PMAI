@@ -1,190 +1,164 @@
-/* styles.css - Global styling for PMAI */
-
-/* Global Reset & Fonts */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  scroll-behavior: smooth;
-}
+/* style.css - Global Styling */
 
 body {
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #ffffff;
+    scroll-behavior: smooth;
 }
 
-/* Navbar */
-nav {
-  background-color: #111;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-nav h1 {
-  font-size: 1.8rem;
-  color: #00ffff;
-  animation: glow 2s infinite alternate;
-}
-nav ul {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-}
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-nav ul li a:hover {
-  color: #00ffff;
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Footer */
+.logo {
+    height: 40px;
+    margin-right: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: rotate(360deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 3rem;
+}
+
+.nav-links li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: #00ffff;
+}
+
 footer {
-  background-color: #111;
-  padding: 1rem;
-  text-align: center;
-  color: #aaa;
-  margin-top: auto;
-  font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 4rem;
+    background: rgba(0, 0, 0, 0.3);
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
 
-/* Landing Page */
-.landing {
-  text-align: center;
-  padding: 5rem 2rem;
-}
-.landing h1 {
-  font-size: 4rem;
-  color: #00ffff;
-  animation: fadeInDown 2s ease;
-}
-.landing p {
-  font-size: 1.2rem;
-  color: #eee;
-  margin-top: 1rem;
-  animation: fadeInUp 2s ease;
+/* About Page Styling */
+.about-container {
+    max-width: 800px;
+    margin: 5rem auto;
+    padding: 0 1rem;
+    text-align: center;
 }
 
-/* Mode Cards */
-.modes-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  padding: 3rem 2rem;
-}
-.card {
-  background-color: #1c1c1e;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: transform 0.3s, background 0.3s;
-  border-left: 5px solid #00ffff;
-}
-.card:hover {
-  transform: scale(1.03);
-  background: #292b2f;
-}
-.card h2 {
-  margin-bottom: 1rem;
-  color: #00ffff;
-  font-size: 1.5rem;
-}
-.card p {
-  font-size: 1rem;
-  color: #ccc;
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #00ffff;
 }
 
-/* Chat UI */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 85vh;
-  padding: 2rem;
+.about-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    color: #e0e0e0;
 }
-.mode-select {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+
+/* Chat Page */
+#chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 80vh;
+    padding: 1rem;
+    overflow: hidden;
 }
-#chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  background: #222;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+
+#chat-window {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
 }
-.message {
-  margin-bottom: 1rem;
-  padding: 0.8rem;
-  border-radius: 10px;
-  max-width: 75%;
+
+#chat-form {
+    display: flex;
+    gap: 0.5rem;
 }
-.message.user {
-  background-color: #444;
-  align-self: flex-end;
-}
-.message.ai {
-  background-color: #00ffff22;
-  align-self: flex-start;
-  color: #fff;
-}
-#chat-input-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+
 #chat-input {
-  flex: 1;
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: none;
-  font-size: 1rem;
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 20px;
+    border: none;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    background-color: #222;
+    color: #fff;
 }
+
 #send-btn {
-  background: #00ffff;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 8px;
-  cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 0 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
-/* Animations */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+#send-btn:hover {
+    background-color: #00ffff;
+    color: #000;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.selectors {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
 
-@keyframes glow {
-  from {
-    text-shadow: 0 0 5px #00ffff;
-  }
-  to {
-    text-shadow: 0 0 20px #00ffff;
-  }
+select {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #222;
+    color: #fff;
+}
+
+.message.user {
+    text-align: right;
+    color: #00ff99;
+    margin: 0.3rem 0;
+}
+
+.message.ai {
+    text-align: left;
+    color: #ffcc00;
+    margin: 0.3rem 0;
 }
