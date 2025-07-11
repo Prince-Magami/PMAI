@@ -1,30 +1,29 @@
-<!-- ✅ Fixed: chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PMAI - Chat</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/chat.css" />
   <link rel="stylesheet" href="./css/animations.css" />
   <link rel="icon" href="./assets/logo.png" />
 </head>
 <body class="chat-page">
   
-  <!-- ✅ Logo + Title Nav -->
+  <!-- 🔝 Logo + Title -->
   <header class="navbar-top">
     <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
     <h1 class="brand-name">PMAI</h1>
   </header>
 
-  <!-- ✅ Main Nav Links -->
+  <!-- 🔗 Page Navigation -->
   <nav class="navbar-main">
     <a href="index.html" class="nav-link">Welcome</a>
     <a href="chat.html" class="nav-link active">PMAI</a>
     <a href="about.html" class="nav-link">About</a>
   </nav>
 
-  <!-- ✅ Mode + Language Selectors -->
+  <!-- 🛠 Mode and Language Selectors -->
   <div class="selector-bar">
     <select id="mode">
       <option value="chat">Chatbox</option>
@@ -38,22 +37,29 @@
     </select>
   </div>
 
-  <!-- ✅ Chat Area -->
+  <!-- 💬 Chat Area -->
   <div class="chat-container">
-    <div id="chat-window" class="chat-history"></div>
-    
+    <div id="chat-window" class="chat-history">
+      <!-- Dynamic chat messages will appear here -->
+    </div>
+
     <form id="chat-form" class="chat-input">
-      <textarea id="chat-input" placeholder="Type a message..." rows="1" required></textarea>
+      <textarea 
+        id="chat-input" 
+        placeholder="Type a message..." 
+        rows="1" 
+        required
+      ></textarea>
       <button type="submit">Send</button>
     </form>
   </div>
 
-  <!-- ✅ Footer -->
+  <!-- 🔻 Footer -->
   <footer>
     <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow</p>
   </footer>
 
-  <!-- ✅ Scripts -->
+  <!-- Scripts -->
   <script src="./js/chat.js"></script>
   <script src="./js/typing.js"></script>
 </body>
