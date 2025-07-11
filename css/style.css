@@ -71,6 +71,26 @@ footer {
   font-size: 15px;
 }
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: rotate(15deg) scale(1.1);
+}
+
+
 /* Landing Page */
 .hero {
   text-align: center;
