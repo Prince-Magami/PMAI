@@ -33,7 +33,7 @@ def build_prompt(mode: str, lang: str, user_input: str):
         "cyber": "You are a cybersecurity assistant giving general cyber hygiene tips and answering related questions."
     }
     lang_note = "Respond only in Nigerian Pidgin." if lang == "pidgin" else "Respond in clear English."
-    return f"{prompt_map.get(mode, 'You are an AI.')}
+    return f"{prompt_map.get(mode, 'You are an AI.')}"
 {lang_note}
 User: {user_input}
 AI:"
