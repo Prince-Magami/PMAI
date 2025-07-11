@@ -8,22 +8,21 @@
   <link rel="stylesheet" href="./css/animations.css" />
   <link rel="icon" href="./assets/logo.png" />
   <style>
-    /* Background SVG fix */
     .background-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: -1; /* Push it behind everything */
-      opacity: 0.2; /* Optional: control visibility */
+      z-index: -1;
+      opacity: 0.2;
       object-fit: cover;
     }
   </style>
 </head>
 <body class="welcome-body">
 
-  <!-- First Navigation Bar: Logo + Title -->
+  <!-- 🔝 Logo + Title -->
   <header class="navbar-top">
     <div class="logo-container">
       <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
@@ -31,49 +30,45 @@
     </div>
   </header>
 
-  <!-- Second Navigation Bar: Links -->
+  <!-- 🔗 Page Navigation -->
   <nav class="navbar-main">
-    <a href="index.html" class="nav-link">Welcome</a>
+    <a href="index.html" class="nav-link active">Welcome</a>
     <a href="chat.html" class="nav-link">PMAI</a>
     <a href="about.html" class="nav-link">About</a>
   </nav>
 
-  <!-- Third Navigation Bar: Mode Summary -->
+  <!-- 💡 Mode Banner -->
   <div class="mode-banner fade-in">
     Modes: Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips
   </div>
 
-  <!-- Circle Modes Section -->
-  <section class="circle-modes">
-    <div class="mode-circle" data-mode="chatbox">
+  <!-- 💬 Circular Mode Cards -->
+  <section class="modes-container">
+    <div class="mode-card" data-mode="chatbox">
       <span>Chatbox</span>
-      <p class="mode-desc">Casual A.I chat and questions.</p>
     </div>
-    <div class="mode-circle" data-mode="scan">
+    <div class="mode-card" data-mode="scan">
       <span>Email/Link Scanner</span>
-      <p class="mode-desc">Analyze emails and links for safety.</p>
     </div>
-    <div class="mode-circle" data-mode="academic">
+    <div class="mode-card" data-mode="edu">
       <span>Academic Assistant</span>
-      <p class="mode-desc">Study tips and past exam resources.</p>
     </div>
-    <div class="mode-circle" data-mode="cyber">
+    <div class="mode-card" data-mode="cyber">
       <span>Cyber Tips</span>
-      <p class="mode-desc">Smart, simple cybersecurity tips.</p>
     </div>
   </section>
 
-  <!-- Continue Button -->
-  <div class="center-button">
-    <a href="chat.html" class="start-btn">Continue to PMAI</a>
+  <!-- 🚀 Start Button -->
+  <div style="text-align: center;">
+    <a href="chat.html" class="continue-btn">Continue to PMAI</a>
   </div>
 
-  <!-- Footer -->
+  <!-- 🔻 Footer -->
   <footer>
     <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow | All rights reserved.</p>
   </footer>
 
-  <!-- Background Image -->
+  <!-- 🌄 Background SVG -->
   <img src="./assets/background.svg" alt="Background" class="background-overlay" />
 
   <script src="./js/typing.js"></script>
