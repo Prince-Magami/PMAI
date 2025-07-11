@@ -1,62 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PMAI – Prince Magami AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="icon" href="assets/logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMAI - Welcome</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="icon" href="./assets/logo.png">
 </head>
-<body>
+<body class="welcome-body">
+    <!-- First Navigation Bar: Logo + Title -->
+    <header class="navbar-top">
+        <img src="./assets/logo.png" alt="PMAI Logo" class="logo">
+        <h1 class="brand-name">PMAI</h1>
+    </header>
 
-  <!-- 🌐 NAVIGATION -->
-  <nav class="navbar">
-    <div class="logo">PMAI</div>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="chat.html">Chat</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </nav>
+    <!-- Second Navigation Bar: Links -->
+    <nav class="navbar-main">
+        <a href="index.html" class="nav-link">Welcome</a>
+        <a href="chat.html" class="nav-link">PMAI</a>
+        <a href="about.html" class="nav-link">About</a>
+    </nav>
 
-  <!-- 🎉 HERO SECTION -->
-  <section class="hero">
-    <h1 class="animated-text">Prince Magami AI</h1>
-    <p class="subtitle">Chatbox | Email Scanner | Academic Assistant | Cyber Tips</p>
-  </section>
-
-  <!-- 📇 MODES EXPLAINED -->
-  <section class="cards-container">
-    <div class="card chatbox">
-      <h3>Chatbox</h3>
-      <p>Talk casually with PMAI on any topic. Fun, fast and witty.</p>
+    <!-- Third Navigation Bar: Mode Summary -->
+    <div class="mode-banner fade-in">
+        Modes: Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips
     </div>
-    <div class="card scanner">
-      <h3>Email/Link Scanner</h3>
-      <p>Paste emails or links. PMAI scans for scam threats with clear feedback.</p>
+
+    <!-- Center Circle Modes Section -->
+    <section class="circle-modes">
+        <div class="mode-circle" data-mode="chatbox">
+            <span>Chatbox</span>
+            <p class="mode-desc">Casual A.I chat and questions.</p>
+        </div>
+        <div class="mode-circle" data-mode="scan">
+            <span>Email/Link Scanner</span>
+            <p class="mode-desc">Analyze emails and links for safety.</p>
+        </div>
+        <div class="mode-circle" data-mode="academic">
+            <span>Academic Assistant</span>
+            <p class="mode-desc">Study tips and past exam resources.</p>
+        </div>
+        <div class="mode-circle" data-mode="cyber">
+            <span>Cyber Tips</span>
+            <p class="mode-desc">Smart, simple cybersecurity tips.</p>
+        </div>
+    </section>
+
+    <!-- Center Button -->
+    <div class="center-button">
+        <a href="chat.html" class="start-btn">Continue to PMAI</a>
     </div>
-    <div class="card academic">
-      <h3>Academic Assistant</h3>
-      <p>Get academic help, study tips or WAEC/JAMB past questions.</p>
-    </div>
-    <div class="card cyber">
-      <h3>Cyber Tips</h3>
-      <p>Daily cyber tips, awareness advice and best practices simplified.</p>
-    </div>
-  </section>
 
-  <!-- 🔗 CTA BUTTON -->
-  <div class="center">
-    <a href="chat.html" class="cta-button">Try PMAI Now →</a>
-  </div>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow | All rights reserved.</p>
+    </footer>
 
-  <!-- 📩 FOOTER -->
-  <footer class="footer">
-    <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT-0725 | © 2025 All Rights Reserved</p>
-  </footer>
+    <!-- Background SVG Honeycomb Layer -->
+    <img src="./assets/background.svg" alt="" class="background-overlay">
 
-  <script src="js/typing.js"></script>
-
+    <script src="./js/typing.js"></script>
 </body>
 </html>
