@@ -1,0 +1,140 @@
+/* =========================
+   PMAI Animations v2
+   Smooth, Pro, Futuristic
+   ========================= */
+
+/* 🔄 Fade In Smooth */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* 🔁 Slide In Left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.7s ease-out forwards;
+}
+
+/* 🔁 Slide In Right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.7s ease-out forwards;
+}
+
+/* 🆙 Pop In (for buttons & circles) */
+@keyframes popIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pop-in {
+  animation: popIn 0.6s ease-in-out forwards;
+}
+
+/* 🔽 Drop In (for cards or flash content) */
+@keyframes dropIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.drop-in {
+  animation: dropIn 0.9s ease forwards;
+}
+
+/* 🌀 Pulse Glow (For hover effect or glowing texts) */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(0, 255, 224, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 224, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(0, 255, 224, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* ✨ Text Typewriter Effect (Optional Use) */
+.typewriter {
+  overflow: hidden;
+  border-right: 3px solid #00ffe0;
+  white-space: nowrap;
+  animation: typing 2s steps(30, end), blink-caret 0.7s step-end infinite;
+  font-family: monospace;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* ⚙️ Smooth Scroll Entry */
+.scroll-fade {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s ease-out;
+}
+
+.scroll-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
