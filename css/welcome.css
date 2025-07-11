@@ -1,1 +1,173 @@
+/* ================
+   Welcome Page CSS
+   ================ */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+/* 🔝 Logo + Title */
+.navbar-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  transition: 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.brand-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: #00ffe0;
+  letter-spacing: 1.5px;
+}
+
+/* 🔗 Navigation Bar */
+.navbar-main {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  background: #111;
+  padding: 10px 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #00ffe0;
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* 💡 Mode Banner */
+.mode-banner {
+  background: #222;
+  color: #00ffe0;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+/* 💬 Mode Cards in Circle */
+.modes-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  padding: 60px 20px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.mode-card {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid #00ffe0;
+  transition: all 0.4s ease-in-out;
+  position: relative;
+}
+
+.mode-card span {
+  font-size: 16px;
+  transition: opacity 0.3s ease-in;
+}
+
+.mode-card:hover {
+  transform: scale(1.2);
+  background: #00ffe0;
+  color: #000;
+  z-index: 10;
+}
+
+/* 🚀 Start Button */
+.continue-btn {
+  display: inline-block;
+  margin-top: 40px;
+  background: #00ffe0;
+  color: #000;
+  font-weight: bold;
+  padding: 12px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.continue-btn:hover {
+  background: #000;
+  color: #00ffe0;
+  transform: scale(1.1);
+}
+
+/* 🔻 Footer */
+footer {
+  background: #111;
+  color: #aaa;
+  text-align: center;
+  padding: 20px;
+  font-size: 15px;
+  margin-top: 60px;
+}
+
+/* 🌄 Background SVG */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.2;
+  object-fit: cover;
+}
 
