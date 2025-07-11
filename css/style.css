@@ -90,6 +90,11 @@ footer {
     transform: rotate(15deg) scale(1.1);
 }
 
+body {
+    background: url('../assets/background.svg') no-repeat center center fixed;
+    background-size: cover;
+}
+
 
 /* Landing Page */
 .hero {
