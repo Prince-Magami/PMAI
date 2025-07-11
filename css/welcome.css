@@ -121,6 +121,18 @@ body {
   transition: opacity 0.3s ease-in;
 }
 
+.mode-card p {
+  display: none; 
+  transition: display 0s;
+}
+
+.mode-card:hover p {
+  display: block;
+}
+   
+.mode-card:hover span {
+  display: none; 
+   
 .mode-card:hover {
   transform: scale(1.2);
   background: #00ffe0;
