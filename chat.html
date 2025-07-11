@@ -1,4 +1,4 @@
-<!-- chat.html -->
+<!-- ✅ Fixed: chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,67 +7,53 @@
   <title>PMAI - Chat</title>
   <link rel="stylesheet" href="./css/style.css" />
   <link rel="stylesheet" href="./css/animations.css" />
+  <link rel="icon" href="./assets/logo.png" />
 </head>
-<body>
-  <!-- First Navigation Bar: Logo + PMAI -->
-  <nav class="main-nav">
-    <div class="logo-center">
-      <h1>PMAI</h1>
-    </div>
+<body class="chat-page">
+  
+  <!-- ✅ Logo + Title Nav -->
+  <header class="navbar-top">
+    <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
+    <h1 class="brand-name">PMAI</h1>
+  </header>
+
+  <!-- ✅ Main Nav Links -->
+  <nav class="navbar-main">
+    <a href="index.html" class="nav-link">Welcome</a>
+    <a href="chat.html" class="nav-link active">PMAI</a>
+    <a href="about.html" class="nav-link">About</a>
   </nav>
 
-  <!-- Second Navigation Bar: Page Links -->
-  <nav class="page-nav">
-    <a href="index.html" class="nav-btn">Welcome</a>
-    <a href="chat.html" class="nav-btn active">PMAI</a>
-    <a href="about.html" class="nav-btn">About</a>
-  </nav>
+  <!-- ✅ Mode + Language Selectors -->
+  <div class="selector-bar">
+    <select id="mode">
+      <option value="chat">Chatbox</option>
+      <option value="scan">Email/Link Scanner</option>
+      <option value="edu">Academic Assistant</option>
+      <option value="cyber">Cybersecurity Tips</option>
+    </select>
+    <select id="lang">
+      <option value="english">English</option>
+      <option value="pidgin">Pidgin</option>
+    </select>
+  </div>
 
-  <!-- Mode and Language Selectors -->
-  <section class="selectors">
-    <div class="selector-left">
-      <label for="mode">Select Mode:</label>
-      <select id="mode">
-        <option value="chat">Chatbox</option>
-        <option value="scan">Email/Link Scanner</option>
-        <option value="edu">Academic Assistant</option>
-        <option value="cyber">Cybersecurity Tips</option>
-      </select>
-    </div>
-    <div class="selector-right">
-      <label for="lang">Select Language:</label>
-      <select id="lang">
-        <option value="english">English</option>
-        <option value="pidgin">Pidgin</option>
-      </select>
-    </div>
-  </section>
-
-  <!-- Flashcard Panel (changes dynamically) -->
-  <section id="flashcard-panel" class="flashcards-container"></section>
-
-  <!-- Chat Display Area -->
-  <main class="chat-container">
-    <div id="chat-window" class="chat-window"></div>
-    <form id="chat-form" class="chat-form">
-      <textarea
-        id="chat-input"
-        placeholder="Type a message..."
-        rows="1"
-        required
-      ></textarea>
-      <button type="submit" class="send-btn">Send</button>
+  <!-- ✅ Chat Area -->
+  <div class="chat-container">
+    <div id="chat-window" class="chat-history"></div>
+    
+    <form id="chat-form" class="chat-input">
+      <textarea id="chat-input" placeholder="Type a message..." rows="1" required></textarea>
+      <button type="submit">Send</button>
     </form>
-  </main>
+  </div>
 
-  <!-- Footer -->
+  <!-- ✅ Footer -->
   <footer>
-    <p>
-      Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow<br />
-      &copy; 2025 All rights reserved.
-    </p>
+    <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow</p>
   </footer>
 
+  <!-- ✅ Scripts -->
   <script src="./js/chat.js"></script>
   <script src="./js/typing.js"></script>
 </body>
