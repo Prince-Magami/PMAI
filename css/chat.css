@@ -148,6 +148,7 @@ body.chat-page {
 
 /* ✍️ Chat Input Area */
 .chat-input {
+  max-width: 900px;
   display: flex;
   align-items: center;
   padding: 15px 20px;
@@ -156,6 +157,7 @@ body.chat-page {
 }
 
 .chat-input textarea {
+  max-width: 900px;
   flex: 1;
   resize: none;
   border: none;
