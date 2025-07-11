@@ -32,12 +32,12 @@ body {
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 70px;
   transition: 0.3s ease;
 }
 
@@ -100,8 +100,8 @@ body {
 }
 
 .mode-card {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   border-radius: 100%;
   background: #222;
   display: flex;
@@ -114,10 +114,11 @@ body {
   border: 2px solid #00ffe0;
   transition: all 0.4s ease-in-out;
   position: relative;
+  top: 20px; 
 }
 
 .mode-card span {
-  font-size: 16px;
+  font-size: 15px;
   transition: opacity 0.3s ease-in;
 }
 
@@ -142,6 +143,7 @@ body {
 
 /* 🚀 Start Button */
 .continue-btn {
+  border: 3px solid white;
   display: inline-block;
   margin-top: 40px;
   background: #00ffe0;
@@ -168,7 +170,8 @@ footer {
   text-align: center;
   padding: 20px;
   font-size: 15px;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
+  position: absolute;
 }
 
 /* 🌄 Background SVG */
