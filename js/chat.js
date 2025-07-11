@@ -1,12 +1,10 @@
-// ===========================
-// chat.js - Frontend logic
-// ===========================
-
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 const chatWindow = document.getElementById('chat-window');
 const modeSelect = document.getElementById('mode');
 const langSelect = document.getElementById('lang');
+
+const API_BASE = 'https://pmai-3.onrender.com'; // 👈 Replace with your backend Render URL
 
 // Update placeholder based on selected mode
 function updatePlaceholder() {
@@ -38,7 +36,7 @@ chatForm.addEventListener('submit', async (e) => {
   chatInput.value = '';
 
   try {
-    const res = await fetch('/chat', {
+    const res = await fetch(`${API_BASE}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: input, mode, lang })
