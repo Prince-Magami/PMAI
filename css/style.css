@@ -32,6 +32,7 @@ body::before {
   z-index: -1;
   position: relative;
   z-index: 1;
+}
 
 header {
   width: 100%;
