@@ -1,0 +1,149 @@
+/* =======================
+   PMAI - About Page CSS
+   ======================= */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.about-page {
+  background-color: #f9f9f9;
+  color: #111;
+}
+
+/* 🔝 Logo Header */
+.navbar-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  transition: 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: rotate(10deg) scale(1.1);
+}
+
+.brand-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: #00ffe0;
+  letter-spacing: 1.5px;
+}
+
+/* 🔗 Navigation Bar */
+.navbar-main {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  background: #111;
+  padding: 10px 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #00ffe0;
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* 📄 About Content */
+.about-content {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  color: #222;
+}
+
+.about-content h2 {
+  font-size: 32px;
+  color: #00b8a9;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.about-content p {
+  margin-bottom: 18px;
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+.about-content ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.about-content ul li {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* 👤 Profile Card */
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+}
+
+.profile-card img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid #00ffe0;
+  object-fit: cover;
+}
+
+.profile-info {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.profile-info a {
+  color: #00b8a9;
+  text-decoration: none;
+}
+
+.profile-info a:hover {
+  text-decoration: underline;
+}
+
+/* 🔻 Footer */
+footer {
+  background: #111;
+  color: #aaa;
+  text-align: center;
+  padding: 15px;
+  font-size: 15px;
+  margin-top: 40px;
+}
