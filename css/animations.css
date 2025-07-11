@@ -1,59 +1,52 @@
-/* animations.css - Advanced Animations */
+/* ====================
+   ANIMATIONS.CSS
+   ==================== */
 
-/* Fade-in from bottom */
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.fade-up {
-    animation: fadeUp 0.8s ease-out;
+@keyframes typing {
+  0% { width: 0 }
+  100% { width: 100% }
 }
 
-/* Logo spin on hover already in style.css */
-
-/* Honeycomb-style hex background pattern */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-image: url("../assets/background.svg");
-    background-size: contain;
-    background-repeat: repeat;
-    opacity: 0.07;
-    z-index: 0;
+@keyframes pulseShadow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 224, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 255, 224, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 224, 0);
+  }
 }
 
-/* Button hover pulse */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+.animated-heading {
+  animation: fadeIn 2s ease forwards;
 }
 
-.button-pulse:hover {
-    animation: pulse 0.4s ease-in-out;
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #00ffe0;
+  width: 0;
+  animation: typing 3s steps(40, end) forwards;
 }
 
-/* Typing animation for placeholder */
-@keyframes typing-blink {
-    0% { border-right: 3px solid #fff; }
-    50% { border-right: 3px solid transparent; }
-    100% { border-right: 3px solid #fff; }
+.hover-glow {
+  transition: all 0.3s ease-in-out;
 }
 
-.typing-effect {
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 3px solid #fff;
-    animation: typing-blink 0.8s step-end infinite;
+.hover-glow:hover {
+  box-shadow: 0 0 15px 5px rgba(0, 255, 224, 0.3);
+  transform: scale(1.1);
+  background: #00ffe0;
+  color: #000;
+}
+
+.pulse-border {
+  animation: pulseShadow 2s infinite;
 }
