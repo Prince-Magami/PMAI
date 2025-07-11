@@ -2,4 +2,6 @@ fastapi
 uvicorn
 cohere
 python-dotenv
-requests
+httpx
+jinja2
+python-multipart
