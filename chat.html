@@ -2,52 +2,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>PMAI Chat</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/animations.css">
-    <script defer src="./js/chat.js"></script>
-    <script defer src="./js/typing.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMAI - Chat</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/animations.css" />
 </head>
 <body>
-    <!-- 🌐 Navigation Bar -->
-    <nav class="navbar">
-        <img src="./assets/logo.png" alt="PMAI Logo" class="logo">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="chat.html" class="active">Chat</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
+  <!-- First Navigation Bar: Logo + PMAI -->
+  <nav class="main-nav">
+    <div class="logo-center">
+      <img src="./assets/logo.png" alt="PMAI Logo" class="logo" />
+      <h1>PMAI</h1>
+    </div>
+  </nav>
 
-    <!-- 💬 Mode and Language Selection -->
-    <section class="selectors">
-        <select id="mode">
-            <option value="chat">Chatbox</option>
-            <option value="scan">Email/Link Scanner</option>
-            <option value="edu">Academic Assistant</option>
-            <option value="cyber">Cybersecurity Tips</option>
-        </select>
-        <select id="lang">
-            <option value="english">English</option>
-            <option value="pidgin">Pidgin</option>
-        </select>
-    </section>
+  <!-- Second Navigation Bar: Page Links -->
+  <nav class="page-nav">
+    <a href="index.html" class="nav-btn">Welcome</a>
+    <a href="chat.html" class="nav-btn active">PMAI</a>
+    <a href="about.html" class="nav-btn">About</a>
+  </nav>
 
-    <!-- 🧠 Chat Window -->
-    <section id="chat-container">
-        <div id="chat-window">
-            <!-- Messages will appear here -->
-        </div>
-        <form id="chat-form">
-            <textarea id="chat-input" placeholder="Type your message here... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
-            <button id="send-btn" type="submit">Send</button>
-        </form>
-    </section>
+  <!-- Mode and Language Selectors -->
+  <section class="selectors">
+    <div class="selector-left">
+      <label for="mode">Select Mode:</label>
+      <select id="mode">
+        <option value="chat">Chatbox</option>
+        <option value="scan">Email/Link Scanner</option>
+        <option value="edu">Academic Assistant</option>
+        <option value="cyber">Cybersecurity Tips</option>
+      </select>
+    </div>
+    <div class="selector-right">
+      <label for="lang">Select Language:</label>
+      <select id="lang">
+        <option value="english">English</option>
+        <option value="pidgin">Pidgin</option>
+      </select>
+    </div>
+  </section>
 
-    <!-- 📩 Footer -->
-    <footer>
-        <p>Prince Magami | magamiabu@gmail.com | Fellow ID: 3MTT | All rights reserved</p>
-    </footer>
+  <!-- Flashcard Panel (changes dynamically) -->
+  <section id="flashcard-panel" class="flashcards-container"></section>
+
+  <!-- Chat Display Area -->
+  <main class="chat-container">
+    <div id="chat-window" class="chat-window"></div>
+    <form id="chat-form" class="chat-form">
+      <textarea
+        id="chat-input"
+        placeholder="Type a message..."
+        rows="1"
+        required
+      ></textarea>
+      <button type="submit" class="send-btn">Send</button>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow<br />
+      &copy; 2025 All rights reserved.
+    </p>
+  </footer>
+
+  <script src="./js/chat.js"></script>
+  <script src="./js/typing.js"></script>
 </body>
 </html>
