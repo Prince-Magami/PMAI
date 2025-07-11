@@ -18,7 +18,13 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-}
+  background-image: url('../assets/background.svg');
+  background-size: contain; 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: #f9f9f9; 
+  opacity: 0.05; 
 
 header {
   width: 100%;
@@ -89,12 +95,6 @@ footer {
 .logo-img:hover {
     transform: rotate(15deg) scale(1.1);
 }
-
-body {
-    background: url('../assets/background.svg') no-repeat center center fixed;
-    background-size: cover;
-}
-
 
 /* Landing Page */
 .hero {
