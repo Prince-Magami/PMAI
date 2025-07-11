@@ -1,9 +1,9 @@
-# app.py
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-import os
 import cohere
+import os
 import requests
 
 app = FastAPI()
@@ -16,62 +16,82 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-COHERE_KEY = os.getenv("COHERE_API_KEY")
-co = cohere.Client(COHERE_KEY)
+cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
 
-class Message(BaseModel):
-    prompt: str
+# ----------- Request Schema ----------- #
+class ChatRequest(BaseModel):
+    message: str
     mode: str
-    lang: str
+    lang: str = "english"
 
-@app.post("/chat")
-async def chat_router(data: Message):
-    prompt = data.prompt
-    mode = data.mode
-    lang = data.lang
+# ----------- Util Functions ----------- #
+def build_prompt(mode: str, lang: str, user_input: str):
+    prompt_map = {
+        "chat": "You are a friendly AI chatbot.",
+        "scan": "You are a cybersecurity analyst. Scan the given link or email and explain the risk involved in clear terms.",
+        "edu": "You are an academic advisor helping students understand their subjects and prepare for exams.",
+        "cyber": "You are a cybersecurity assistant giving general cyber hygiene tips and answering related questions."
+    }
+    lang_note = "Respond only in Nigerian Pidgin." if lang == "pidgin" else "Respond in clear English."
+    return f"{prompt_map.get(mode, 'You are an AI.')}
+{lang_note}
+User: {user_input}
+AI:"
 
-    if mode == "chat":
-        return chat_response(prompt, lang)
-    elif mode == "scan":
-        return scan_url_response(prompt)
+# ----------- Main AI Endpoint ----------- #
+@app.post("/api/chat")
+async def chat_with_ai(payload: ChatRequest):
+    user_input = payload.message
+    mode = payload.mode
+    lang = payload.lang
+
+    # ------- Email/Link Scan Mode ------- #
+    if mode == "scan":
+        virus_total_key = os.getenv("VIRUSTOTAL_API_KEY")
+        headers = {"x-apikey": virus_total_key}
+
+        if user_input.startswith("http"):
+            url_id = requests.utils.quote(user_input, safe='')
+            vt_url = f"https://www.virustotal.com/api/v3/urls/{url_id}"
+            resp = requests.get(vt_url, headers=headers)
+            if resp.status_code == 200:
+                data = resp.json()
+                score = data.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
+                categories = data.get("data", {}).get("attributes", {}).get("categories", {})
+                total = sum(score.values())
+                malicious = score.get("malicious", 0)
+                harmless = score.get("harmless", 0)
+                pct_malicious = round((malicious / total) * 100) if total else 0
+
+                reply = f"Scanned URL: {user_input}\nMalicious: {malicious}\nHarmless: {harmless}\nThreat Score: {pct_malicious}%\nCategory: {', '.join(categories.values()) or 'Unknown'}\nVerdict: {'Avoid visiting this site.' if pct_malicious >= 40 else 'Link seems okay but be cautious.'}"
+                return JSONResponse({"reply": reply})
+            else:
+                return JSONResponse({"reply": "Could not analyze the link. Please try again."})
+
+        else:
+            scan_prompt = build_prompt("scan", lang, user_input)
+            result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=scan_prompt)
+            return JSONResponse({"reply": result.text.strip()})
+
+    # ------- Education Mode (Show Tips or Respond) ------- #
     elif mode == "edu":
-        return academic_advice_response(prompt)
+        edu_prompt = build_prompt("edu", lang, user_input)
+        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=edu_prompt)
+        return JSONResponse({"reply": result.text.strip()})
+
+    # ------- Cyber Mode ------- #
     elif mode == "cyber":
-        return cybersecurity_tip_response(prompt)
+        cyber_prompt = build_prompt("cyber", lang, user_input)
+        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=cyber_prompt)
+        return JSONResponse({"reply": result.text.strip()})
+
+    # ------- Chat Mode (Default) ------- #
     else:
-        return {"response": "Invalid mode selected."}
+        default_prompt = build_prompt("chat", lang, user_input)
+        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=default_prompt)
+        return JSONResponse({"reply": result.text.strip()})
 
-def chat_response(prompt, lang):
-    suffix = " (reply in Pidgin English)" if lang == "pidgin" else ""
-    response = co.chat(message=prompt + suffix)
-    return {"response": response.text}
-
-def scan_url_response(input_text):
-    # Example only: You should integrate a real scanning service
-    virus_total_api_key = os.getenv("VIRUSTOTAL_API_KEY")
-    headers = {"x-apikey": virus_total_api_key}
-
-    if input_text.startswith("http"):
-        url = f"https://www.virustotal.com/api/v3/urls"
-        resp = requests.post(url, data={"url": input_text}, headers=headers).json()
-        scan_id = resp.get("data", {}).get("id")
-
-        if scan_id:
-            report = requests.get(f"https://www.virustotal.com/api/v3/analyses/{scan_id}", headers=headers).json()
-            stats = report.get("data", {}).get("attributes", {}).get("stats", {})
-            return {"response": f"Scan Results: {stats}"}
-    return {"response": "Invalid URL or scan failed."}
-
-def academic_advice_response(prompt):
-    # Simple placeholder advice
-    links = "https://myschool.ng/classroom/"
-    return {"response": f"To prepare well, practice past WAEC/NECO/JAMB questions here: {links}.\nTip: Set a timetable, revise topics weekly, and test yourself."}
-
-def cybersecurity_tip_response(prompt):
-    tips = [
-        "Use strong, unique passwords for all accounts.",
-        "Avoid clicking links in unknown emails.",
-        "Keep your software up to date.",
-        "Enable two-factor authentication."
-    ]
-    return {"response": tips[len(prompt) % len(tips)]}
+# ----------- Root Test ----------- #
+@app.get("/")
+def root():
+    return {"message": "PMAI API is running."}
