@@ -10,7 +10,7 @@
 </head>
 <body class="welcome-body">
 
-  <!-- 🔝 Logo + Title -->
+  <!-- 🔝 Logo + Title (Compact) -->
   <header class="navbar-top">
     <div class="logo-container">
       <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
@@ -18,7 +18,7 @@
     </div>
   </header>
 
-  <!-- 🔗 Page Navigation -->
+  <!-- 🔗 Navigation -->
   <nav class="navbar-main">
     <a href="index.html" class="nav-link active">Welcome</a>
     <a href="chat.html" class="nav-link">PMAI</a>
@@ -26,37 +26,35 @@
   </nav>
 
   <!-- 💡 Mode Banner -->
-  <div class="mode-banner">
+  <div class="mode-banner slide-in-right">
     Modes: Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips
   </div>
 
-  <!-- 💬 Circular Mode Cards (2 up, 2 down) -->
-  <section class="modes-container">
-    <div class="mode-row">
-      <div class="mode-card" data-mode="chatbox">
+  <!-- 💬 Mode Cards (2 by 2 layout) -->
+  <section class="modes-wrapper">
+    <div class="modes-container">
+      <div class="mode-card pop-in" data-mode="chatbox">
         <span>Chatbox</span>
         <p class="mode-desc">Casual A.I chat and smart questions.</p>
       </div>
-      <div class="mode-card" data-mode="scan">
+      <div class="mode-card pop-in" data-mode="scan">
         <span>Email/Link Scanner</span>
         <p class="mode-desc">Analyze emails and links for threats.</p>
       </div>
-    </div>
-    <div class="mode-row">
-      <div class="mode-card" data-mode="edu">
+      <div class="mode-card pop-in" data-mode="edu">
         <span>Academic Assistant</span>
         <p class="mode-desc">Study help and past exam materials.</p>
       </div>
-      <div class="mode-card" data-mode="cyber">
+      <div class="mode-card pop-in" data-mode="cyber">
         <span>Cyber Tips</span>
         <p class="mode-desc">Simple and smart cybersecurity advice.</p>
       </div>
     </div>
   </section>
 
-  <!-- 🚀 Start Button -->
+  <!-- 🚀 Continue Button -->
   <div style="text-align: center;">
-    <a href="chat.html" class="continue-btn">Continue to PMAI</a>
+    <a href="chat.html" class="continue-btn drop-in">Continue to PMAI</a>
   </div>
 
   <!-- 🔻 Footer -->
@@ -64,7 +62,7 @@
     <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow | All rights reserved.</p>
   </footer>
 
-  <!-- 🌄 Background SVG -->
+  <!-- 🌄 Background -->
   <img src="./assets/background.svg" alt="Background" class="background-overlay" />
 
   <script src="./js/typing.js"></script>
