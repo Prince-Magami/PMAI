@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modeSelect = document.getElementById('mode');
   const langSelect = document.getElementById('lang');
 
-  const API_BASE = 'https://pmai-3.onrender.com'; // ✅ Your deployed backend
+  const API_BASE = 'https://pmai-pm.onrender.com'; // 
 
   // Update placeholder based on selected mode
   function updatePlaceholder() {
