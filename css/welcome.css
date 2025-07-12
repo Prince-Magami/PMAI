@@ -1,8 +1,8 @@
-/* ================
-   Welcome Page CSS
-   ================ */
+/* ========================
+   PMAI - Welcome Page CSS
+   ======================== */
 
-/* Reset */
+/* Reset & Global */
 * {
   margin: 0;
   padding: 0;
@@ -14,14 +14,18 @@
 body {
   background-color: #f9f9f9;
   color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-/* 🔝 Logo + Title */
+/* 🔝 Top Navbar: Logo + Brand */
 .navbar-top {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   padding: 15px 30px;
   position: sticky;
   top: 0;
@@ -36,8 +40,8 @@ body {
 }
 
 .logo-img {
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
   transition: 0.3s ease;
 }
 
@@ -52,7 +56,7 @@ body {
   letter-spacing: 1.5px;
 }
 
-/* 🔗 Navigation Bar */
+/* 🔗 Navigation Links */
 .navbar-main {
   display: flex;
   justify-content: center;
@@ -88,79 +92,91 @@ body {
   letter-spacing: 1px;
 }
 
-/* 💬 Mode Cards in Circle */
+/* 💬 Mode Cards in Circle Layout */
 .modes-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 50px;
-  padding: 60px 20px 20px;
-  max-width: 1000px;
-  margin: 0 auto;
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 60px auto 20px;
 }
 
 .mode-card {
-  width: 180px;
-  height: 180px;
-  border-radius: 100%;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
   background: #222;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  position: absolute;
+  border: 2px solid #00ffe0;
+  transition: all 0.4s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
+  flex-direction: column;
   cursor: pointer;
-  border: 2px solid #00ffe0;
-  transition: all 0.4s ease-in-out;
-  position: relative;
-  top: 20px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* 🌐 Circle positioning */
+.mode-card[data-mode="chatbox"]  { top: 0;     left: 50%; transform: translateX(-50%); }
+.mode-card[data-mode="scan"]     { top: 50%;   right: 0;  transform: translateY(-50%); }
+.mode-card[data-mode="edu"]      { bottom: 0;  left: 50%; transform: translateX(-50%); }
+.mode-card[data-mode="cyber"]    { top: 50%;   left: 0;   transform: translateY(-50%); }
+
+/* 🌟 Mode Text */
 .mode-card span {
   font-size: 15px;
-  transition: opacity 0.3s ease-in;
+  transition: opacity 0.3s ease;
 }
 
 .mode-card p {
-  display: none; 
-  transition: display 0s;
+  display: none;
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+/* 🔁 Hover Effects */
+.mode-card:hover {
+  background: #00ffe0;
+  color: #000;
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+.mode-card:hover span {
+  display: none;
 }
 
 .mode-card:hover p {
   display: block;
 }
-   
-.mode-card:hover span {
-  display: none; 
-   
-.mode-card:hover {
-  transform: scale(1.2);
-  background: #00ffe0;
-  color: #000;
-  z-index: 10;
-}
 
-/* 🚀 Start Button */
+/* 🚀 Continue Button */
 .continue-btn {
-  border: 3px solid white;
   display: inline-block;
-  margin-top: 40px;
   background: #00ffe0;
   color: #000;
-  font-weight: bold;
-  padding: 12px 30px;
-  border-radius: 50px;
-  text-decoration: none;
+  font-weight: 700;
+  padding: 14px 32px;
   font-size: 18px;
-  transition: 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50px;
+  margin: 40px auto;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
 }
 
 .continue-btn:hover {
   background: #000;
   color: #00ffe0;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* 🔻 Footer */
@@ -168,10 +184,12 @@ footer {
   background: #111;
   color: #aaa;
   text-align: center;
-  padding: 20px;
-  font-size: 15px;
-  margin-bottom: 10px;
-  position: absolute;
+  padding: 25px 20px;
+  font-size: 14px;
+  margin-top: auto;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
 /* 🌄 Background SVG */
@@ -185,4 +203,3 @@ footer {
   opacity: 0.2;
   object-fit: cover;
 }
-
