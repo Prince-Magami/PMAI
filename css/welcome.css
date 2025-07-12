@@ -1,7 +1,3 @@
-/* ========================
-   PMAI - Welcome Page CSS
-   ======================== */
-
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +16,7 @@ body.welcome-body {
   overflow-x: hidden;
 }
 
-/* 🔝 Compact Logo Bar */
+/* Compact Logo Bar */
 .navbar-top {
   display: flex;
   justify-content: center;
@@ -53,7 +49,7 @@ body.welcome-body {
   letter-spacing: 1.2px;
 }
 
-/* 🔗 Navigation */
+/*  Navigation */
 .navbar-main {
   display: flex;
   justify-content: center;
@@ -78,7 +74,7 @@ body.welcome-body {
   transform: scale(1.1);
 }
 
-/* 💡 Mode Banner */
+/* Mode Banner */
 .mode-banner {
   background: #111;
   color: #00ffe0;
@@ -89,7 +85,7 @@ body.welcome-body {
   letter-spacing: 1px;
 }
 
-/* 💬 Modes Grid (2 by 2) */
+/* Modes Grid (2 by 2) */
 .modes-wrapper {
   display: flex;
   justify-content: center;
@@ -106,7 +102,11 @@ body.welcome-body {
   position: relative;
 }
 
-/* 🟡 Mode Card */
+.modes-container:hover {
+   gap: 80px 100px;
+
+}
+/*  Mode Card */
 .mode-card {
   width: 150px;
   height: 150px;
@@ -138,8 +138,10 @@ body.welcome-body {
   text-align: center;
 }
 
-/* 🚀 Hover: Expand and change */
+/* Hover: Expand and change */
 .mode-card:hover {
+  width: 200px;
+  height: 200px;
   background: #00ffe0;
   color: #000;
   transform: scale(1.25) translateY(-5px);
@@ -154,7 +156,7 @@ body.welcome-body {
   display: block;
 }
 
-/* 🚀 Continue Button */
+/*  Continue Button */
 .continue-btn {
   display: inline-block;
   background: #00ffe0;
@@ -177,7 +179,7 @@ body.welcome-body {
   transform: scale(1.05);
 }
 
-/* 🔻 Footer */
+/*  Footer */
 footer {
   background: #111;
   color: #aaa;
@@ -187,7 +189,7 @@ footer {
   margin-top: auto;
 }
 
-/* 🌄 Background Image */
+/* Background Image */
 .background-overlay {
   position: fixed;
   top: 0;
