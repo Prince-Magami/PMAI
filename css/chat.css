@@ -1,3 +1,8 @@
+/* =========================
+   PMAI Chat Page Styling
+   ========================= */
+
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +16,7 @@ body.chat-page {
   color: #222;
 }
 
-/* Logo + Title */
+/* 🔝 Logo + Title */
 .navbar-top {
   display: flex;
   justify-content: center;
@@ -25,8 +30,8 @@ body.chat-page {
 }
 
 .logo-img {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
   transition: 0.3s ease;
 }
@@ -92,7 +97,7 @@ body.chat-page {
   background: #eee;
 }
 
-/* Chat Container */
+/* 💬 Chat Container */
 .chat-container {
   max-width: 900px;
   margin: 10px auto;
@@ -105,7 +110,7 @@ body.chat-page {
   overflow: hidden;
 }
 
-/* Chat Window */
+/* 📝 Chat Window */
 .chat-history {
   flex: 1;
   overflow-y: auto;
@@ -125,7 +130,7 @@ body.chat-page {
   word-wrap: break-word;
 }
 
-/* User Messages */
+/* 👤 User Messages */
 .message.user {
   align-self: flex-end;
   background-color: #00ffe0;
@@ -133,7 +138,7 @@ body.chat-page {
   border-radius: 18px 18px 0 18px;
 }
 
-/* Bot Messages */
+/* 🤖 Bot Messages */
 .message.bot {
   align-self: flex-start;
   background-color: #222;
@@ -141,7 +146,7 @@ body.chat-page {
   border-radius: 18px 18px 18px 0;
 }
 
-/* Chat Input Area */
+/* ✍️ Chat Input Area */
 .chat-input {
   max-width: 900px;
   display: flex;
@@ -159,7 +164,6 @@ body.chat-page {
   border-radius: 10px;
   padding: 14px;
   font-size: 16px;
-  align-items: center;
   background-color: #fff;
   outline: none;
   height: 45px;
@@ -183,7 +187,7 @@ body.chat-page {
   color: #00ffe0;
 }
 
-/*  Footer */
+/* 🔻 Footer */
 footer {
   background: #111;
   color: #aaa;
