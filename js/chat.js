@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, mode, lang })
+        body: JSON.stringify({ message: input, mode, lang })
       });
 
       if (!res.ok) throw new Error("Response not OK");
