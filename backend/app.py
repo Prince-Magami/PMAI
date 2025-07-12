@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://pmai-brac-9swaa96oh-abubakar-magamis-projects.vercel.app/"],
+    allow_origins=["https://pmai-pm.onrender.com", "https://your-frontend-url.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,13 +22,11 @@ app.add_middleware(
 cohere_api_key = os.getenv("COHERE_API_KEY")
 co = cohere.Client(cohere_api_key)
 
-# ----------- Request Schema ----------- #
 class ChatRequest(BaseModel):
     message: str
     mode: str
     lang: str = "english"
 
-# ----------- Util Functions ----------- #
 def build_prompt(mode: str, lang: str, user_input: str):
     prompt_map = {
         "chat": "You are a friendly AI chatbot.",
@@ -42,14 +40,13 @@ def build_prompt(mode: str, lang: str, user_input: str):
 User: {user_input}
 AI:"""
 
-# ----------- Main AI Endpoint ----------- #
 @app.post("/api/chat")
 async def chat_with_ai(payload: ChatRequest):
     user_input = payload.message
     mode = payload.mode
     lang = payload.lang
 
-    # ------- Email/Link Scan Mode ------- #
+    # VirusTotal scan if link
     if mode == "scan":
         virus_total_key = os.getenv("VIRUSTOTAL_API_KEY")
         headers = {"x-apikey": virus_total_key}
@@ -74,28 +71,24 @@ async def chat_with_ai(payload: ChatRequest):
 
         else:
             scan_prompt = build_prompt("scan", lang, user_input)
-            result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=scan_prompt)
+            result = co.chat(model="command-r-plus", message=user_input, preamble=scan_prompt)
             return JSONResponse({"reply": result.text.strip()})
 
-    # ------- Education Mode (Show Tips or Respond) ------- #
     elif mode == "edu":
         edu_prompt = build_prompt("edu", lang, user_input)
-        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=edu_prompt)
+        result = co.chat(model="command-r-plus", message=user_input, preamble=edu_prompt)
         return JSONResponse({"reply": result.text.strip()})
 
-    # ------- Cyber Mode ------- #
     elif mode == "cyber":
         cyber_prompt = build_prompt("cyber", lang, user_input)
-        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=cyber_prompt)
+        result = co.chat(model="command-r-plus", message=user_input, preamble=cyber_prompt)
         return JSONResponse({"reply": result.text.strip()})
 
-    # ------- Chat Mode (Default) ------- #
     else:
         default_prompt = build_prompt("chat", lang, user_input)
-        result = cohere_client.chat(model="command-r-plus", message=user_input, preamble=default_prompt)
+        result = co.chat(model="command-r-plus", message=user_input, preamble=default_prompt)
         return JSONResponse({"reply": result.text.strip()})
 
-# ----------- Root Test ----------- #
 @app.get("/")
 def root():
     return {"message": "PMAI API is running."}
