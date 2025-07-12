@@ -1,45 +1,3 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-import cohere
-import os
-import requests
-from dotenv import load_dotenv
-
-load_dotenv()
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://pmai-pm.onrender.com", "https://your-frontend-url.com"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-cohere_api_key = os.getenv("COHERE_API_KEY")
-co = cohere.Client(cohere_api_key)
-
-class ChatRequest(BaseModel):
-    message: str
-    mode: str
-    lang: str = "english"
-
-def build_prompt(mode: str, lang: str, user_input: str):
-    prompt_map = {
-        "chat": "You are a friendly AI chatbot.",
-        "scan": "You are a cybersecurity analyst. Scan the given link or email and explain the risk involved in clear terms.",
-        "edu": "You are an academic advisor helping students understand their subjects and prepare for exams.",
-        "cyber": "You are a cybersecurity assistant giving general cyber hygiene tips and answering related questions."
-    }
-    lang_note = "Respond only in Nigerian Pidgin." if lang == "pidgin" else "Respond in clear English."
-    return f"""{prompt_map.get(mode, 'You are an AI.')}
-{lang_note}
-User: {user_input}
-AI:"""
-
 @app.post("/api/chat")
 async def chat_with_ai(payload: ChatRequest):
     user_input = payload.message
@@ -71,24 +29,44 @@ async def chat_with_ai(payload: ChatRequest):
 
         else:
             scan_prompt = build_prompt("scan", lang, user_input)
-            result = co.chat(model="command-r-plus", message=user_input, preamble=scan_prompt)
-            return JSONResponse({"reply": result.text.strip()})
+            response = co.generate(
+                model="command-r-plus",
+                prompt=scan_prompt,
+                max_tokens=300,
+                temperature=0.7,
+                stop_sequences=["User:", "AI:"]
+            )
+            return JSONResponse({"reply": response.generations[0].text.strip()})
 
     elif mode == "edu":
         edu_prompt = build_prompt("edu", lang, user_input)
-        result = co.chat(model="command-r-plus", message=user_input, preamble=edu_prompt)
-        return JSONResponse({"reply": result.text.strip()})
+        response = co.generate(
+            model="command-r-plus",
+            prompt=edu_prompt,
+            max_tokens=300,
+            temperature=0.7,
+            stop_sequences=["User:", "AI:"]
+        )
+        return JSONResponse({"reply": response.generations[0].text.strip()})
 
     elif mode == "cyber":
         cyber_prompt = build_prompt("cyber", lang, user_input)
-        result = co.chat(model="command-r-plus", message=user_input, preamble=cyber_prompt)
-        return JSONResponse({"reply": result.text.strip()})
+        response = co.generate(
+            model="command-r-plus",
+            prompt=cyber_prompt,
+            max_tokens=300,
+            temperature=0.7,
+            stop_sequences=["User:", "AI:"]
+        )
+        return JSONResponse({"reply": response.generations[0].text.strip()})
 
     else:
         default_prompt = build_prompt("chat", lang, user_input)
-        result = co.chat(model="command-r-plus", message=user_input, preamble=default_prompt)
-        return JSONResponse({"reply": result.text.strip()})
-
-@app.get("/")
-def root():
-    return {"message": "PMAI API is running."}
+        response = co.generate(
+            model="command-r-plus",
+            prompt=default_prompt,
+            max_tokens=300,
+            temperature=0.7,
+            stop_sequences=["User:", "AI:"]
+        )
+        return JSONResponse({"reply": response.generations[0].text.strip()})
