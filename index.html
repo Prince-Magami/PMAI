@@ -26,33 +26,37 @@
   </nav>
 
   <!-- 💡 Mode Banner -->
-  <div class="mode-banner slide-in-right">
+  <div class="mode-banner">
     Modes: Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips
   </div>
 
-  <!-- 💬 Circular Mode Cards -->
+  <!-- 💬 Circular Mode Cards (2 up, 2 down) -->
   <section class="modes-container">
-    <div class="mode-card pop-in" data-mode="chatbox">
-      <span>Chatbox</span>
-      <p class="mode-desc">Casual A.I chat and smart questions.</p>
+    <div class="mode-row">
+      <div class="mode-card" data-mode="chatbox">
+        <span>Chatbox</span>
+        <p class="mode-desc">Casual A.I chat and smart questions.</p>
+      </div>
+      <div class="mode-card" data-mode="scan">
+        <span>Email/Link Scanner</span>
+        <p class="mode-desc">Analyze emails and links for threats.</p>
+      </div>
     </div>
-    <div class="mode-card pop-in" data-mode="scan">
-      <span>Email/Link Scanner</span>
-      <p class="mode-desc">Analyze emails and links for threats.</p>
-    </div>
-    <div class="mode-card pop-in" data-mode="edu">
-      <span>Academic Assistant</span>
-      <p class="mode-desc">Study help and past exam materials.</p>
-    </div>
-    <div class="mode-card pop-in" data-mode="cyber">
-      <span>Cyber Tips</span>
-      <p class="mode-desc">Simple and smart cybersecurity advice.</p>
+    <div class="mode-row">
+      <div class="mode-card" data-mode="edu">
+        <span>Academic Assistant</span>
+        <p class="mode-desc">Study help and past exam materials.</p>
+      </div>
+      <div class="mode-card" data-mode="cyber">
+        <span>Cyber Tips</span>
+        <p class="mode-desc">Simple and smart cybersecurity advice.</p>
+      </div>
     </div>
   </section>
 
   <!-- 🚀 Start Button -->
   <div style="text-align: center;">
-    <a href="chat.html" class="continue-btn drop-in">Continue to PMAI</a>
+    <a href="chat.html" class="continue-btn">Continue to PMAI</a>
   </div>
 
   <!-- 🔻 Footer -->
