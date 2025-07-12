@@ -3,57 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PMAI - Chat</title>
-  <link rel="stylesheet" href="./css/chat.css" />
+  <title>PMAI - Welcome</title>
+  <link rel="stylesheet" href="./css/welcome.css" />
   <link rel="stylesheet" href="./css/animations.css" />
   <link rel="icon" href="./assets/logo.png" />
 </head>
-<body class="chat-page">
+<body class="welcome-body">
 
   <!-- 🔝 Logo + Title -->
   <header class="navbar-top">
-    <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
-    <h1 class="brand-name">PMAI</h1>
+    <div class="logo-container">
+      <img src="./assets/logo.png" alt="PMAI Logo" class="logo-img" />
+      <h1 class="brand-name fade-in">PMAI</h1>
+    </div>
   </header>
 
-  <!-- 🔗 Navigation -->
+  <!-- 🔗 Page Navigation -->
   <nav class="navbar-main">
-    <a href="index.html" class="nav-link">Welcome</a>
-    <a href="chat.html" class="nav-link active">PMAI</a>
+    <a href="index.html" class="nav-link active">Welcome</a>
+    <a href="chat.html" class="nav-link">PMAI</a>
     <a href="about.html" class="nav-link">About</a>
   </nav>
 
-  <!-- 🔘 Mode + Language Selectors -->
-  <div class="selector-bar">
-    <select id="mode">
-      <option value="chat">Chatbox</option>
-      <option value="scan">Email/Link Scanner</option>
-      <option value="edu">Academic Assistant</option>
-      <option value="cyber">Cybersecurity Tips</option>
-    </select>
-    <select id="lang">
-      <option value="english">English</option>
-      <option value="pidgin">Pidgin</option>
-    </select>
+  <!-- 💡 Mode Banner -->
+  <div class="mode-banner slide-in-right">
+    Modes: Chatbox | Email/Link Scanner | Academic Assistant | Cybersecurity Tips
   </div>
 
-  <!-- 💬 Chat Section -->
-  <div class="chat-container">
-    <div id="chat-window" class="chat-history"></div>
+  <!-- 💬 Circular Mode Cards -->
+  <section class="modes-container">
+    <div class="mode-card pop-in" data-mode="chatbox">
+      <span>Chatbox</span>
+      <p class="mode-desc">Casual A.I chat and smart questions.</p>
+    </div>
+    <div class="mode-card pop-in" data-mode="scan">
+      <span>Email/Link Scanner</span>
+      <p class="mode-desc">Analyze emails and links for threats.</p>
+    </div>
+    <div class="mode-card pop-in" data-mode="edu">
+      <span>Academic Assistant</span>
+      <p class="mode-desc">Study help and past exam materials.</p>
+    </div>
+    <div class="mode-card pop-in" data-mode="cyber">
+      <span>Cyber Tips</span>
+      <p class="mode-desc">Simple and smart cybersecurity advice.</p>
+    </div>
+  </section>
 
-    <form id="chat-form" class="chat-input">
-      <textarea id="chat-input" placeholder="Type something..." rows="1" required></textarea>
-      <button type="submit">Send</button>
-    </form>
+  <!-- 🚀 Start Button -->
+  <div style="text-align: center;">
+    <a href="chat.html" class="continue-btn drop-in">Continue to PMAI</a>
   </div>
 
   <!-- 🔻 Footer -->
   <footer>
-    <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow</p>
+    <p>&copy; 2025 Abubakar Muhammad Magami | magamiabu@gmail.com | 3MTT Fellow | All rights reserved.</p>
   </footer>
 
-  <!-- 📜 Scripts -->
-  <script src="./js/chat.js"></script>
+  <!-- 🌄 Background SVG -->
+  <img src="./assets/background.svg" alt="Background" class="background-overlay" />
+
   <script src="./js/typing.js"></script>
 </body>
 </html>
