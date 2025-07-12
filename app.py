@@ -5,6 +5,9 @@ from pydantic import BaseModel
 import cohere
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -16,7 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
+cohere_api_key = os.getenv("COHERE_API_KEY")
+co = cohere.Client(cohere_api_key)
 
 # ----------- Request Schema ----------- #
 class ChatRequest(BaseModel):
