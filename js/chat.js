@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const API_BASE = 'https://pmai-3.onrender.com'; // ✅ Your deployed backend
 
-  // 🔁 Update placeholder based on selected mode
+  // Update placeholder based on selected mode
   function updatePlaceholder() {
     const mode = modeSelect.value;
     if (mode === 'scan') {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   modeSelect.addEventListener('change', updatePlaceholder);
   updatePlaceholder(); // 🔄 Initial run
 
-  // 💬 Form Submission Handler
+  // Form Submission Handler
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mode = modeSelect.value;
     const lang = langSelect.value;
 
-    // 🧠 Show user message
+    //  Show user message
     appendMessage('user', input);
     chatInput.value = '';
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendBtn.textContent = "Thinking...";
 
     try {
-      const res = await fetch(`${API_BASE}/chat`, {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input, mode, lang })
@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Response not OK");
 
       const data = await res.json();
-      const reply = data.response || "⚠️ No response from AI.";
+      const reply = data.reply || "⚠️ No response from AI.";
 
       appendMessage('bot', reply);
     } catch (err) {
-      console.error("❌ Error from API:", err);
-      appendMessage('bot', '⚠️ Something went wrong. Please try again.');
+      console.error(" Error from API:", err);
+      appendMessage('bot', ' Something went wrong. Please try again.');
     } finally {
       chatInput.disabled = false;
       sendBtn.disabled = false;
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 💡 Append message to chat window
+  //  Append message to chat window
   function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender);
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
-  // ⌨️ Enter to send, Shift+Enter for new line
+  // ⌨ Enter to send, Shift+Enter for new line
   chatInput.addEventListener("keydown", function(e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
