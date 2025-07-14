@@ -23,7 +23,7 @@
     <a href="about.html" class="nav-link">About</a>
   </nav>
 
-  <!--Mode and Language Selectors -->
+  <!-- Mode and Language Selectors -->
   <div class="selector-bar">
     <select id="mode">
       <option value="chat">Chatbox</option>
@@ -37,11 +37,29 @@
     </select>
   </div>
 
+  <!-- Flashcard Display -->
+  <div id="flashcard-section" style="display: none;">
+    <div id="flashcards" class="flashcard-container"></div>
+    <div id="edu-links" class="resource-links" style="display: none;">
+      <h3>📚 Study Resources</h3>
+      <ul>
+        <li><a href="https://quizlet.com" target="_blank">Quizlet</a></li>
+        <li><a href="https://khanacademy.org" target="_blank">Khan Academy</a></li>
+        <li><a href="https://scholar.google.com" target="_blank">Google Scholar</a></li>
+        <li><a href="https://examtopics.com" target="_blank">Exam Topics</a></li>
+        <li><a href="https://openstax.org" target="_blank">OpenStax</a></li>
+        <li><a href="https://studocu.com" target="_blank">StuDocu</a></li>
+        <li><a href="https://brainly.com" target="_blank">Brainly</a></li>
+        <li><a href="https://sparknotes.com" target="_blank">SparkNotes</a></li>
+        <li><a href="https://academia.edu" target="_blank">Academia.edu</a></li>
+        <li><a href="https://wolframalpha.com" target="_blank">Wolfram Alpha</a></li>
+      </ul>
+    </div>
+  </div>
+
   <!-- Chat Area -->
   <div class="chat-container">
-    <div id="chat-window" class="chat-history">
-    </div>
-
+    <div id="chat-window" class="chat-history"></div>
     <form id="chat-form" class="chat-input">
       <textarea 
         id="chat-input" 
