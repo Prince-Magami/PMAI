@@ -1,52 +1,87 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-import os
-import google.generativeai as genai
-from dotenv import load_dotenv
+document.addEventListener("DOMContentLoaded", () => {
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+  const chatWindow = document.getElementById('chat-window');
+  const modeSelect = document.getElementById('mode');
+  const langSelect = document.getElementById('lang');
 
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+  const API_BASE = 'https://pmai-pm.onrender.com'; // 
 
-# ✅ CORRECT model name
-model = genai.GenerativeModel("gemini-pro")
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-class ChatRequest(BaseModel):
-    message: str
-    mode: str
-    lang: str = "english"
-
-def build_prompt(mode: str, lang: str, user_input: str):
-    prompts = {
-        "chat": "You are a smart, friendly assistant. Answer clearly and naturally.",
-        "scan": "You are a cybersecurity analyst. Scan this link or email for threats (phishing, scam, malware). Give a verdict in plain language.",
-        "edu": "You are an education advisor. Give study tips, exam help, and explanations.",
-        "cyber": "You are a cybersecurity tutor. Explain terms and give safety tips in simple words.",
+  // Update placeholder based on selected mode
+  function updatePlaceholder() {
+    const mode = modeSelect.value;
+    if (mode === 'scan') {
+      chatInput.placeholder = "Paste link or email here...";
+    } else if (mode === 'edu') {
+      chatInput.placeholder = "Ask an academic-related question...";
+    } else if (mode === 'cyber') {
+      chatInput.placeholder = "Ask a cybersecurity question...";
+    } else {
+      chatInput.placeholder = "Type something...";
     }
-    lang_line = "Use Nigerian Pidgin." if lang == "pidgin" else "Use simple, clear English."
-    return f"{prompts.get(mode, 'You are an assistant.')}\n{lang_line}\nUser: {user_input}\nAI:"
+  }
 
-@app.post("/api/chat")
-async def chat_with_gemini(payload: ChatRequest):
-    prompt = build_prompt(payload.mode, payload.lang, payload.message)
-    try:
-        response = model.generate_content(prompt)
-        return JSONResponse({"reply": response.text.strip()})
-    except Exception as e:
-        print("Gemini API Error:", e)
-        return JSONResponse({"reply": "⚠️ Gemini failed to respond. Check server logs."})
+  modeSelect.addEventListener('change', updatePlaceholder);
+  updatePlaceholder(); // 🔄 Initial run
 
-@app.get("/")
-def root():
-    return {"message": "PMAI Gemini API is running ✅"}
+  // Form Submission Handler
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const input = chatInput.value.trim();
+    if (!input) return;
+
+    const mode = modeSelect.value;
+    const lang = langSelect.value;
+
+    //  Show user message
+    appendMessage('user', input);
+    chatInput.value = '';
+
+    // Disable input and button while waiting
+    chatInput.disabled = true;
+    const sendBtn = chatForm.querySelector('button');
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Thinking...";
+
+    try {
+      const res = await fetch(`${API_BASE}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input, mode, lang })
+      });
+
+      if (!res.ok) throw new Error("Response not OK");
+
+      const data = await res.json();
+      const reply = data.reply || "⚠️ No response from AI.";
+
+      appendMessage('bot', reply);
+    } catch (err) {
+      console.error(" Error from API:", err);
+      appendMessage('bot', ' Something went wrong. Please try again.');
+    } finally {
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send";
+      chatInput.focus();
+    }
+  });
+
+  //  Append message to chat window
+  function appendMessage(sender, text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    msgDiv.textContent = text;
+    chatWindow.appendChild(msgDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  // ⌨ Enter to send, Shift+Enter for new line
+  chatInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      chatForm.dispatchEvent(new Event('submit'));
+    }
+  });
+});
