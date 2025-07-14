@@ -24,8 +24,8 @@ body.about-page {
 }
 
 .logo-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin-right: 10px;
   transition: 0.3s ease;
 }
@@ -36,7 +36,7 @@ body.about-page {
 
 .brand-name {
   font-size: 30px;
-  font-weight: 850;
+  font-weight: 800;
   color: #00ffe0;
   letter-spacing: 1.5px;
 }
@@ -107,6 +107,7 @@ body.about-page {
   align-items: center;
   gap: 30px;
   margin-top: 40px;
+  margin-left: 20px; 
   padding-top: 20px;
   border-top: 1px solid #ccc;
 }
