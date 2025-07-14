@@ -53,8 +53,8 @@ body.welcome-body {
 .navbar-main {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  background: #1a1a1a; /* DIFFERENT COLOR from first nav */
+  gap: 60px;
+  background: #1a1a1a; 
   padding: 10px 0;
 }
 
