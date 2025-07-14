@@ -228,3 +228,17 @@ footer {
 .flashcard:hover {
   transform: scale(1.05);
 }
+
+/* Background Image */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.12;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
