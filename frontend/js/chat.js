@@ -73,13 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
-  // Hide flashcards & resources
+ 
   function hideFlashcards() {
     flashcardSection.style.display = "none";
     eduLinksContainer.style.display = "none";
   }
 
-  // Update input placeholder and flashcard visibility
   function updatePlaceholder() {
     const mode = modeSelect.value;
     if (mode === 'scan') {
@@ -102,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   chatInput.addEventListener("focus", hideFlashcards);
 
-  // Handle message submit
+
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const input = chatInput.value.trim();
@@ -154,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
-  // Format scan results if % present
+
   function formatScannerReply(text) {
     const match = text.match(/(\d+)%/);
     const score = match ? parseInt(match[1]) : null;
