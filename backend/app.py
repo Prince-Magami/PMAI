@@ -7,32 +7,32 @@ import os
 import requests
 from dotenv import load_dotenv
 
-# Load .env variables
+
 load_dotenv()
 
-# ✅ DEFINE THE APP FIRST
+
 app = FastAPI()
 
-# ✅ CORS Setup
+# CORS Setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace * with your frontend URL in production
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ Setup Cohere
+# Cohere
 cohere_api_key = os.getenv("COHERE_API_KEY")
 co = cohere.Client(cohere_api_key)
 
-# ✅ Pydantic Schema
+# Pydantic Schema
 class ChatRequest(BaseModel):
     message: str
     mode: str
     lang: str = "english"
 
-# ✅ Prompt Builder
+# Prompt Builder
 def build_prompt(mode: str, lang: str, user_input: str):
     prompt_map = {
         "chat": "You are a friendly AI chatbot.",
@@ -43,7 +43,7 @@ def build_prompt(mode: str, lang: str, user_input: str):
     lang_note = "Respond only in Nigerian Pidgin." if lang == "pidgin" else "Respond in clear English."
     return f"""{prompt_map.get(mode, 'You are an AI.')}\n{lang_note}\nUser: {user_input}\nAI:"""
 
-# ✅ Main Chat Route
+# Main Chat Route
 @app.post("/api/chat")
 async def chat_with_ai(payload: ChatRequest):
     prompt = build_prompt(payload.mode, payload.lang, payload.message)
@@ -81,7 +81,7 @@ async def get_flashcards(mode: str):
         print("Flashcard error:", e)
         return JSONResponse({"flashcards": []})
 
-# ✅ Health Check
+# Health Check
 @app.get("/")
 def root():
     return {"message": "PMAI API is running."}
