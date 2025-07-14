@@ -8,63 +8,66 @@ document.addEventListener("DOMContentLoaded", () => {
   const flashcardsContainer = document.getElementById('flashcards');
   const eduLinksContainer = document.getElementById('edu-links');
 
-  const API_BASE = 'https://pmai-pm.onrender.com';
+  const API_BASE = 'https://pmai-pm.onrender.com'; // ✅ Your FastAPI backend URL
 
-  // Simulate flashcard text from A.I
+  // 📚 Sample flashcard text
   function generateFlashcardText(mode) {
     const samples = {
       edu: [
-        "🧠 Study in 25-min sessions with 5-min breaks (Pomodoro Technique).",
-        "📚 Avoid cramming the night before your exam.",
-        "📖 Teach someone else — it helps you retain better.",
-        "📝 Make use of past questions and self-quizzing.",
-        "📵 Turn off phone notifications during study time."
+        "🧠 Use spaced repetition to retain concepts longer.",
+        "📚 Study with practice questions, not just notes.",
+        "🎯 Set clear study goals before each session.",
+        "☕ Avoid studying while tired or hungry.",
+        "📵 Turn off distractions during focused study time."
       ],
       cyber: [
-        "🔐 Enable Two-Factor Authentication (2FA) on all important accounts.",
-        "📛 Never click on unknown links in emails — phishing alert!",
-        "💻 Use strong, unique passwords and a password manager.",
-        "🕵️ Beware of social engineering. Always verify before trusting.",
-        "🧼 Keep your software and antivirus updated regularly."
+        "🔐 Use Two-Factor Authentication for all major accounts.",
+        "🚫 Don’t share your OTP with anyone — ever!",
+        "🔍 Inspect URLs carefully to avoid phishing traps.",
+        "🧼 Keep all software and apps updated regularly.",
+        "🔒 Use a password manager instead of reusing passwords."
       ]
     };
 
-    const chosen = samples[mode];
-    const randomIndex = Math.floor(Math.random() * chosen.length);
-    return chosen[randomIndex];
-  }
-
-  function showFlashcards(mode) {
-    flashcardsContainer.innerHTML = "";
-    flashcardSection.style.display = "block";
-
-    // Show 3 unique cards
-    const shown = new Set();
-    while (shown.size < 3) {
-      let text = generateFlashcardText(mode);
-      if (!shown.has(text)) {
-        const card = document.createElement('div');
-        card.className = 'flashcard';
-        card.textContent = text;
-        flashcardsContainer.appendChild(card);
-        shown.add(text);
-      }
+    const modeCards = samples[mode];
+    const chosen = new Set();
+    while (chosen.size < 3) {
+      const card = modeCards[Math.floor(Math.random() * modeCards.length)];
+      chosen.add(card);
     }
 
-    // Toggle study resources if mode is edu
+    return [...chosen];
+  }
+
+  // 🎴 Show Flashcards
+  function showFlashcards(mode) {
+    flashcardsContainer.innerHTML = '';
+    flashcardSection.style.display = 'block';
+
+    const flashcards = generateFlashcardText(mode);
+    flashcards.forEach(text => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.textContent = text;
+      flashcardsContainer.appendChild(card);
+    });
+
     eduLinksContainer.style.display = mode === 'edu' ? 'block' : 'none';
   }
 
+  // 🙈 Hide Flashcards
   function hideFlashcards() {
     flashcardSection.style.display = 'none';
+    eduLinksContainer.style.display = 'none';
   }
 
-  // Update placeholder based on selected mode
+  // 🛠️ Mode change behavior
   function updatePlaceholder() {
     const mode = modeSelect.value;
 
     if (mode === 'scan') {
       chatInput.placeholder = "Paste link or email here...";
+      hideFlashcards();
     } else if (mode === 'edu') {
       chatInput.placeholder = "Ask an academic-related question...";
       showFlashcards('edu');
@@ -72,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       chatInput.placeholder = "Ask a cybersecurity question...";
       showFlashcards('cyber');
     } else {
-      chatInput.placeholder = "Type something...";
+      chatInput.placeholder = "Type a message...";
       hideFlashcards();
     }
   }
@@ -80,12 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
   modeSelect.addEventListener('change', updatePlaceholder);
   updatePlaceholder();
 
-  // Hide flashcards when user wants to type
-  chatInput.addEventListener('focus', () => {
-    hideFlashcards();
-  });
+  chatInput.addEventListener('focus', hideFlashcards);
 
-  // Form Submission Handler
+  // ✉️ Submit message
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -97,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     appendMessage('user', input);
     chatInput.value = '';
-
     chatInput.disabled = true;
     const sendBtn = chatForm.querySelector('button');
     sendBtn.disabled = true;
@@ -113,12 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Response not OK");
 
       const data = await res.json();
-      const reply = data.reply || "⚠️ No response from AI.";
+      const reply = data.reply || "⚠️ No response from Gemini.";
 
       appendMessage('bot', reply);
     } catch (err) {
-      console.error("Error from API:", err);
-      appendMessage('bot', '❌ Something went wrong. Please try again.');
+      console.error("Gemini API Error:", err);
+      appendMessage('bot', '❌ Something went wrong. Try again.');
     } finally {
       chatInput.disabled = false;
       sendBtn.disabled = false;
@@ -127,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 🗨️ Display message in chat window
   function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender);
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
+  // ⌨️ Enter to send (Shift+Enter = new line)
   chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
