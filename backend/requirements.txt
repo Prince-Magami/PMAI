@@ -1,9 +1,8 @@
 fastapi
 uvicorn
-google-generativeai
+cohere
 python-dotenv
 httpx
 jinja2
 python-multipart
 requests
-pydantic
