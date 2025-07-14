@@ -47,6 +47,7 @@ body.chat-page {
   display: flex;
   justify-content: center;
   gap: 60px;
+  border: 2px solid #00ffe0;
   background: #111;
   padding: 10px 0;
 }
