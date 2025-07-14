@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Response not OK");
 
       const data = await res.json();
-      let reply = data.reply || "⚠️ No response from AI.";
+      let reply = data.reply || "No response from AI.";
 
       
       if (mode === 'scan') {
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
       appendMessage('bot', reply);
     } catch (err) {
       console.error("Error from API:", err);
-      appendMessage('bot', '❌ Something went wrong. Try again.');
+      appendMessage('bot', ' Something went wrong. Try again.');
     } finally {
       chatInput.disabled = false;
       sendBtn.disabled = false;
@@ -122,9 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const percentMatch = rawText.match(/(\d+)%/);
     const risk = percentMatch ? parseInt(percentMatch[1]) : null;
     if (risk !== null) {
-      return `🔍 Trust Score: ${risk}%\n📌 Analysis: ${rawText}`;
+      return `Trust Score: ${risk}%\n Analysis: ${rawText}`;
     } else {
-      return `📌 ${rawText}`;
+      return ` ${rawText}`;
     }
   }
 
