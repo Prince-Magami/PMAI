@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       let reply = data.reply || "⚠️ No response from AI.";
 
-      // Special formatting for scanner mode
+      
       if (mode === 'scan') {
         reply = formatScannerReply(reply);
       }
