@@ -1,9 +1,5 @@
-/* =========================
-   PMAI Animations v2
-   Smooth, Pro, Futuristic
-   ========================= */
 
-/* 🔄 Fade In Smooth */
+/* Fade In Smooth */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -19,7 +15,7 @@
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* 🔁 Slide In Left */
+/* Slide In Left */
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -35,7 +31,7 @@
   animation: slideInLeft 0.7s ease-out forwards;
 }
 
-/* 🔁 Slide In Right */
+/*  Slide In Right */
 @keyframes slideInRight {
   from {
     opacity: 0;
@@ -51,7 +47,7 @@
   animation: slideInRight 0.7s ease-out forwards;
 }
 
-/* 🆙 Pop In (for buttons & circles) */
+/* Pop In (for buttons) */
 @keyframes popIn {
   0% {
     transform: scale(0.6);
@@ -70,7 +66,7 @@
   animation: popIn 0.6s ease-in-out forwards;
 }
 
-/* 🔽 Drop In (for cards or flash content) */
+/* Drop In (for cards) */
 @keyframes dropIn {
   0% {
     opacity: 0;
@@ -86,7 +82,7 @@
   animation: dropIn 0.9s ease forwards;
 }
 
-/* 🌀 Pulse Glow (For hover effect or glowing texts) */
+/* Pulse Glow (For hover effect or glowing texts) */
 @keyframes pulseGlow {
   0% {
     box-shadow: 0 0 0px rgba(0, 255, 224, 0.6);
@@ -103,7 +99,7 @@
   animation: pulseGlow 2s infinite;
 }
 
-/* ✨ Text Typewriter Effect (Optional Use) */
+/* Text Typewriter Effect */
 .typewriter {
   overflow: hidden;
   border-right: 3px solid #00ffe0;
@@ -127,7 +123,7 @@
   }
 }
 
-/* ⚙️ Smooth Scroll Entry */
+/* Smooth Scroll Entry */
 .scroll-fade {
   opacity: 0;
   transform: translateY(30px);
