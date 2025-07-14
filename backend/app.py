@@ -56,30 +56,6 @@ async def chat_with_ai(payload: ChatRequest):
     )
     return JSONResponse({"reply": response.generations[0].text.strip()})
     
-@app.post("/api/flashcards")
-async def get_flashcards(req: Request):
-    body = await req.json()
-    mode = body.get("mode", "chat")
-    prompt_templates = {
-        "edu": "Give 3 short, clear study or exam tips in bullet points.",
-        "cyber": "Give 3 clear cybersecurity safety tips for normal people in bullet points."
-    }
-    prompt = prompt_templates.get(mode, "Give 3 helpful life tips.")
-    try:
-        response = co.generate(
-            model="command-r-plus",
-            prompt=prompt,
-            max_tokens=100,
-            temperature=0.6,
-            stop_sequences=["User:", "AI:"]
-        )
-        lines = response.generations[0].text.strip().split("\n")
-        flashcards = [line.strip("•").strip("-").strip() for line in lines if line.strip()]
-        return JSONResponse({"flashcards": flashcards[:3]})
-    except Exception as e:
-        print("Flashcard AI error:", e)
-        return JSONResponse({"flashcards": []})
-
 
 # Health Check
 @app.get("/")
