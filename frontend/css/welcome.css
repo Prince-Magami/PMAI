@@ -16,7 +16,7 @@ body.welcome-body {
   overflow-x: hidden;
 }
 
-/* Compact Logo Bar */
+/* Logo Bar */
 .navbar-top {
   display: flex;
   justify-content: center;
@@ -33,18 +33,18 @@ body.welcome-body {
 }
 
 .logo-img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   transition: transform 0.3s ease;
 }
 
 .logo-img:hover {
-  transform: rotate(15deg) scale(1.1);
+  transform: rotate(360deg) scale(1.1);
 }
 
 .brand-name {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 50px;
+  font-weight: 850;
   color: #00ffe0;
   letter-spacing: 1.2px;
 }
@@ -85,7 +85,7 @@ body.welcome-body {
   letter-spacing: 1px;
 }
 
-/* Modes Grid (2 by 2) */
+/* Modes Grid */
 .modes-wrapper {
   display: flex;
   justify-content: center;
@@ -96,20 +96,20 @@ body.welcome-body {
   display: grid;
   grid-template-columns: repeat(2, 180px);
   grid-template-rows: repeat(2, 180px);
-  gap: 60px 80px;
+  gap: 80px 100px;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
 .modes-container:hover {
-   gap: 80px 100px;
+   gap: 100px 120px;
 
 }
-/*  Mode Card */
+/* Mode Card */
 .mode-card {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   background: #222;
   color: #fff;
@@ -138,10 +138,10 @@ body.welcome-body {
   text-align: center;
 }
 
-/* Hover: Expand and change */
+/* Hover: Expand */
 .mode-card:hover {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   background: #00ffe0;
   color: #000;
   transform: scale(1.25) translateY(-5px);
@@ -166,10 +166,11 @@ body.welcome-body {
   font-size: 18px;
   border: none;
   border-radius: 50px;
+  width: 500px;
   margin: 40px auto;
   transition: all 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
   text-decoration: none;
 }
 
