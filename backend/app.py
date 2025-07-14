@@ -1,87 +1,62 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const chatForm = document.getElementById('chat-form');
-  const chatInput = document.getElementById('chat-input');
-  const chatWindow = document.getElementById('chat-window');
-  const modeSelect = document.getElementById('mode');
-  const langSelect = document.getElementById('lang');
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+import cohere
+import os
+import requests
+from dotenv import load_dotenv
 
-  const API_BASE = 'https://pmai-pm.onrender.com'; // 
+# Load .env variables
+load_dotenv()
 
-  // Update placeholder based on selected mode
-  function updatePlaceholder() {
-    const mode = modeSelect.value;
-    if (mode === 'scan') {
-      chatInput.placeholder = "Paste link or email here...";
-    } else if (mode === 'edu') {
-      chatInput.placeholder = "Ask an academic-related question...";
-    } else if (mode === 'cyber') {
-      chatInput.placeholder = "Ask a cybersecurity question...";
-    } else {
-      chatInput.placeholder = "Type something...";
+# ✅ DEFINE THE APP FIRST
+app = FastAPI()
+
+# ✅ CORS Setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace * with your frontend URL in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ✅ Setup Cohere
+cohere_api_key = os.getenv("COHERE_API_KEY")
+co = cohere.Client(cohere_api_key)
+
+# ✅ Pydantic Schema
+class ChatRequest(BaseModel):
+    message: str
+    mode: str
+    lang: str = "english"
+
+# ✅ Prompt Builder
+def build_prompt(mode: str, lang: str, user_input: str):
+    prompt_map = {
+        "chat": "You are a friendly AI chatbot.",
+        "scan": "You are a cybersecurity analyst. Scan the given link or email and explain the risk involved in clear terms.",
+        "edu": "You are an academic advisor helping students understand their subjects and prepare for exams.",
+        "cyber": "You are a cybersecurity assistant giving general cyber hygiene tips and answering related questions."
     }
-  }
+    lang_note = "Respond only in Nigerian Pidgin." if lang == "pidgin" else "Respond in clear English."
+    return f"""{prompt_map.get(mode, 'You are an AI.')}\n{lang_note}\nUser: {user_input}\nAI:"""
 
-  modeSelect.addEventListener('change', updatePlaceholder);
-  updatePlaceholder(); // 🔄 Initial run
+# ✅ Main Chat Route
+@app.post("/api/chat")
+async def chat_with_ai(payload: ChatRequest):
+    prompt = build_prompt(payload.mode, payload.lang, payload.message)
+    response = co.generate(
+        model="command-r-plus",
+        prompt=prompt,
+        max_tokens=300,
+        temperature=0.7,
+        stop_sequences=["User:", "AI:"]
+    )
+    return JSONResponse({"reply": response.generations[0].text.strip()})
 
-  // Form Submission Handler
-  chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const input = chatInput.value.trim();
-    if (!input) return;
-
-    const mode = modeSelect.value;
-    const lang = langSelect.value;
-
-    //  Show user message
-    appendMessage('user', input);
-    chatInput.value = '';
-
-    // Disable input and button while waiting
-    chatInput.disabled = true;
-    const sendBtn = chatForm.querySelector('button');
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Thinking...";
-
-    try {
-      const res = await fetch(`${API_BASE}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input, mode, lang })
-      });
-
-      if (!res.ok) throw new Error("Response not OK");
-
-      const data = await res.json();
-      const reply = data.reply || "⚠️ No response from AI.";
-
-      appendMessage('bot', reply);
-    } catch (err) {
-      console.error(" Error from API:", err);
-      appendMessage('bot', ' Something went wrong. Please try again.');
-    } finally {
-      chatInput.disabled = false;
-      sendBtn.disabled = false;
-      sendBtn.textContent = "Send";
-      chatInput.focus();
-    }
-  });
-
-  //  Append message to chat window
-  function appendMessage(sender, text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender);
-    msgDiv.textContent = text;
-    chatWindow.appendChild(msgDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  // ⌨ Enter to send, Shift+Enter for new line
-  chatInput.addEventListener("keydown", function(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      chatForm.dispatchEvent(new Event('submit'));
-    }
-  });
-});
+# ✅ Health Check
+@app.get("/")
+def root():
+    return {"message": "PMAI API is running."}
