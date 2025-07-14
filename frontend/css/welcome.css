@@ -43,8 +43,8 @@ body.welcome-body {
 }
 
 .brand-name {
-  font-size: 50px;
-  font-weight: 850;
+  font-size: 45px;
+  font-weight: 800;
   color: #00ffe0;
   letter-spacing: 1.2px;
 }
@@ -96,14 +96,14 @@ body.welcome-body {
   display: grid;
   grid-template-columns: repeat(2, 180px);
   grid-template-rows: repeat(2, 180px);
-  gap: 80px 100px;
+  gap: 65px 85px;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
 .modes-container:hover {
-   gap: 100px 120px;
+   gap: 85px 105px;
 
 }
 /* Mode Card */
