@@ -1,6 +1,3 @@
-// typing.js
-
-// Typing effect for hero title or any element with class ".typewriter"
 function typeWriterEffect(text, elementId, speed = 100) {
   let i = 0;
   const target = document.getElementById(elementId);
@@ -15,7 +12,7 @@ function typeWriterEffect(text, elementId, speed = 100) {
   typing();
 }
 
-// Fade in on scroll
+
 function fadeInOnScroll() {
   const elements = document.querySelectorAll(".fade-in");
   const observer = new IntersectionObserver((entries) => {
@@ -29,7 +26,7 @@ function fadeInOnScroll() {
   elements.forEach((el) => observer.observe(el));
 }
 
-// Smooth scroll to sections
+
 function smoothScrollSetup() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -41,7 +38,7 @@ function smoothScrollSetup() {
   });
 }
 
-// Init all
+
 window.addEventListener("DOMContentLoaded", () => {
   fadeInOnScroll();
   smoothScrollSetup();
