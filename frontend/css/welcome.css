@@ -56,6 +56,7 @@ body.welcome-body {
   gap: 60px;
   background: #1a1a1a; 
   border: 2px solid #00ffe0;
+  border-radius: 10px; 
   padding: 10px 0;
 }
 
