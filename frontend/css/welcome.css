@@ -181,6 +181,16 @@ body.welcome-body {
   transform: scale(1.05);
 }
 
+.background-over lay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.2;
+  object-fit: cover;
+}
 /*  Footer */
 footer {
   background: #111;
