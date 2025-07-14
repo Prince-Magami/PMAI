@@ -23,7 +23,7 @@ body.welcome-body {
   align-items: center;
   background: rgba(0, 0, 0, 0.75);
   padding: 8px 20px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(2px);
 }
 
 .logo-container {
@@ -55,6 +55,7 @@ body.welcome-body {
   justify-content: center;
   gap: 60px;
   background: #1a1a1a; 
+  border: 2px solid #00ffe0;
   padding: 10px 0;
 }
 
