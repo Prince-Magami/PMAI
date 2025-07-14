@@ -96,20 +96,20 @@ body.welcome-body {
   display: grid;
   grid-template-columns: repeat(2, 180px);
   grid-template-rows: repeat(2, 180px);
-  gap: 65px 85px;
+  gap: 60px 80px;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
 .modes-container:hover {
-   gap: 85px 105px;
+   gap: 70px 90px;
 
 }
 /* Mode Card */
 .mode-card {
-  width: 250px;
-  height: 250px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: #222;
   color: #fff;
@@ -140,8 +140,8 @@ body.welcome-body {
 
 /* Hover: Expand */
 .mode-card:hover {
-  width: 300px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   background: #00ffe0;
   color: #000;
   transform: scale(1.25) translateY(-5px);
