@@ -4,42 +4,79 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatWindow = document.getElementById('chat-window');
   const modeSelect = document.getElementById('mode');
   const langSelect = document.getElementById('lang');
+  const flashcardSection = document.getElementById('flashcard-section');
+  const flashcardsContainer = document.getElementById('flashcards');
+  const eduLinksContainer = document.getElementById('edu-links');
 
-  const API_BASE = 'https://pmai-pm.onrender.com'; // 
+  const API_BASE = 'https://pmai-pm.onrender.com';
 
-  // Update placeholder based on selected mode
+  async function fetchFlashcards(mode) {
+    try {
+      const res = await fetch(`${API_BASE}/api/flashcards?mode=${mode}`);
+      const data = await res.json();
+      return data.flashcards || [];
+    } catch (err) {
+      console.error("Flashcard Error:", err);
+      return [];
+    }
+  }
+
+  async function showFlashcards(mode) {
+    const flashcards = await fetchFlashcards(mode);
+    if (flashcards.length === 0) return;
+
+    flashcardsContainer.innerHTML = "";
+    flashcards.forEach(text => {
+      const card = document.createElement("div");
+      card.className = "flashcard";
+      card.textContent = text;
+      flashcardsContainer.appendChild(card);
+    });
+
+    flashcardSection.style.display = "block";
+    eduLinksContainer.style.display = mode === "edu" ? "block" : "none";
+  }
+
+  function hideFlashcards() {
+    flashcardSection.style.display = "none";
+    eduLinksContainer.style.display = "none";
+  }
+
   function updatePlaceholder() {
     const mode = modeSelect.value;
+
     if (mode === 'scan') {
       chatInput.placeholder = "Paste link or email here...";
+      hideFlashcards();
     } else if (mode === 'edu') {
       chatInput.placeholder = "Ask an academic-related question...";
+      showFlashcards('edu');
     } else if (mode === 'cyber') {
       chatInput.placeholder = "Ask a cybersecurity question...";
+      showFlashcards('cyber');
     } else {
       chatInput.placeholder = "Type something...";
+      hideFlashcards();
     }
   }
 
   modeSelect.addEventListener('change', updatePlaceholder);
-  updatePlaceholder(); // 🔄 Initial run
+  updatePlaceholder();
 
-  // Form Submission Handler
+  chatInput.addEventListener('focus', hideFlashcards);
+
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const input = chatInput.value.trim();
     if (!input) return;
 
     const mode = modeSelect.value;
     const lang = langSelect.value;
 
-    //  Show user message
     appendMessage('user', input);
     chatInput.value = '';
-
-    // Disable input and button while waiting
     chatInput.disabled = true;
+
     const sendBtn = chatForm.querySelector('button');
     sendBtn.disabled = true;
     sendBtn.textContent = "Thinking...";
@@ -54,12 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Response not OK");
 
       const data = await res.json();
-      const reply = data.reply || "⚠️ No response from AI.";
+      let reply = data.reply || "⚠️ No response from AI.";
+
+      // Special formatting for scanner mode
+      if (mode === 'scan') {
+        reply = formatScannerReply(reply);
+      }
 
       appendMessage('bot', reply);
     } catch (err) {
-      console.error(" Error from API:", err);
-      appendMessage('bot', ' Something went wrong. Please try again.');
+      console.error("Error from API:", err);
+      appendMessage('bot', '❌ Something went wrong. Try again.');
     } finally {
       chatInput.disabled = false;
       sendBtn.disabled = false;
@@ -68,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  //  Append message to chat window
   function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender);
@@ -77,8 +118,17 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
-  // ⌨ Enter to send, Shift+Enter for new line
-  chatInput.addEventListener("keydown", function(e) {
+  function formatScannerReply(rawText) {
+    const percentMatch = rawText.match(/(\d+)%/);
+    const risk = percentMatch ? parseInt(percentMatch[1]) : null;
+    if (risk !== null) {
+      return `🔍 Trust Score: ${risk}%\n📌 Analysis: ${rawText}`;
+    } else {
+      return `📌 ${rawText}`;
+    }
+  }
+
+  chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       chatForm.dispatchEvent(new Event('submit'));
