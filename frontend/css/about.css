@@ -1,8 +1,3 @@
-/* =======================
-   PMAI - About Page CSS
-   ======================= */
-
-/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -15,7 +10,7 @@ body.about-page {
   color: #111;
 }
 
-/* 🔝 Logo Header */
+/* Logo Header */
 .navbar-top {
   display: flex;
   justify-content: center;
@@ -29,28 +24,28 @@ body.about-page {
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 100px;
+  height: 100px;
   margin-right: 10px;
   transition: 0.3s ease;
 }
 
 .logo-img:hover {
-  transform: rotate(10deg) scale(1.1);
+  transform: rotate(360deg) scale(1.1);
 }
 
 .brand-name {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 850;
   color: #00ffe0;
   letter-spacing: 1.5px;
 }
 
-/* 🔗 Navigation Bar */
+/* Navigation Bar */
 .navbar-main {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 60px;
   background: #111;
   padding: 10px 0;
 }
@@ -71,7 +66,7 @@ body.about-page {
   transform: scale(1.1);
 }
 
-/* 📄 About Content */
+/* About Content */
 .about-content {
   text-align: center;
   max-width: 900px;
@@ -106,7 +101,7 @@ body.about-page {
   font-size: 16px;
 }
 
-/* 👤 Profile Card */
+/* Profile Card */
 .profile-card {
   display: flex;
   align-items: center;
@@ -139,7 +134,7 @@ body.about-page {
   text-decoration: underline;
 }
 
-/* 🔻 Footer */
+/* Footer */
 footer {
   background: #111;
   color: #aaa;
