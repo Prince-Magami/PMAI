@@ -7,7 +7,7 @@
 }
 
 body.welcome-body {
-  background-color: grey;
+  background-color: black;
   color: #222;
   min-height: 100vh;
   display: flex;
