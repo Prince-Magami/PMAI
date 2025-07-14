@@ -229,16 +229,3 @@ footer {
   transform: scale(1.05);
 }
 
-/* Background Image */
-.background-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
-  opacity: 0.2;
-  object-fit: cover;
-  pointer-events: none;
-  user-select: none;
-}
