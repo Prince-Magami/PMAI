@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   scroll-behavior: smooth;
-  background-color: black;
 }
 
 body.welcome-body {
