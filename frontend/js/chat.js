@@ -13,18 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Static flashcards for immediate display
   const staticFlashcards = {
     edu: [
-      "📘 Break study time into chunks (Pomodoro).",
-      "🧠 Test yourself regularly with past questions.",
-      "🗂️ Make summary notes while reading.",
-      "📴 Minimize distractions when studying.",
-      "📝 Write what you remember after learning."
+      "Break study time into chunks (Pomodoro).",
+      "Test yourself regularly with past questions.",
+      "Make summary notes while reading.",
+      "Minimize distractions when studying.",
+      "Write what you remember after learning."
     ],
     cyber: [
-      "🔐 Use 2FA to protect your accounts.",
-      "⚠️ Don’t click suspicious links or attachments.",
-      "🛡️ Update your antivirus and OS regularly.",
-      "🧠 Learn to spot phishing emails.",
-      "📵 Avoid using public Wi-Fi for banking."
+      "Use 2FA to protect your accounts.",
+      "Don’t click suspicious links or attachments.",
+      "Update your antivirus and OS regularly.",
+      "Learn to spot phishing emails.",
+      "Avoid using public Wi-Fi for banking."
     ]
   };
 
@@ -40,13 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Hybrid Flashcard Display: Static first, then AI-generated
+
   async function showFlashcards(mode) {
     flashcardsContainer.innerHTML = "";
     flashcardSection.style.display = "block";
     eduLinksContainer.style.display = mode === "edu" ? "block" : "none";
 
-    // Show 3 static cards immediately
+  
     const picked = new Set();
     while (picked.size < 3) {
       const card = staticFlashcards[mode][Math.floor(Math.random() * staticFlashcards[mode].length)];
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Replace with AI flashcards after 2 seconds
+
     setTimeout(async () => {
       const aiCards = await fetchFlashcards(mode);
       if (!aiCards.length) return;
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
       appendMessage('bot', reply);
     } catch (err) {
       console.error("Error from API:", err);
-      appendMessage('bot', '❌ Something went wrong. Try again.');
+      appendMessage('bot', 'Something went wrong. Try again.');
     } finally {
       chatInput.disabled = false;
       sendBtn.disabled = false;
