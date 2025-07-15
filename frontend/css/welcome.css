@@ -188,7 +188,7 @@ body.welcome-body {
 }
 
 .background-over lay {
-  position: absolute;
+  position: fixed;
   margin-top: 0px;
   width: 100vw;
   height: 100vh;
