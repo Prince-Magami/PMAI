@@ -186,7 +186,7 @@ body.welcome-body {
 
 }
 /*  Footer */
-footer {
+.footer {
   background: #111;
   color: #aaa;
   text-align: center;
@@ -234,9 +234,5 @@ footer {
     font-size: 1.1rem !important;
   }
 
-  img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
 }
 
