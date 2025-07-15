@@ -17,11 +17,10 @@ body.about-page {
   align-items: center;
   background: rgba(0, 0, 0, 0.7);
   padding: 15px 30px;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
-  position: sticky;
+  backdrop-filter: blur(5px)
 }
 
 .logo-img {
@@ -51,7 +50,8 @@ body.about-page {
   border-radius: 10px; 
   background: #111;
   padding: 10px 0;
-  position: sticky;
+  position: fixed;z-index: 1000;
+  backdrop-filter: blur(5px)
 }
 
 .nav-link {
@@ -76,8 +76,9 @@ body.about-page {
   max-width: 900px;
   margin: 40px auto;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.7);
+  background: white;
   border-radius: 20px;
+  border: 2px solid #00b8a9;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   color: #222;
 }
