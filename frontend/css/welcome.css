@@ -23,7 +23,7 @@ body.welcome-body {
   background: rgba(0, 0, 0, 0.75);
   padding: 8px 20px;
   backdrop-filter: blur(2px);
-  position: fixed;
+  position: sticky;
   z-index: 1000;
   backdrop-filter: blur(5px)
 }
@@ -60,7 +60,7 @@ body.welcome-body {
   border: 2px solid #00ffe0;
   border-radius: 10px; 
   padding: 10px 0;
-  position: fixed;
+  position: sticky;
   z-index: 1000;
   backdrop-filter: blur(5px)
 }
