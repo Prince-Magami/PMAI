@@ -21,7 +21,7 @@ body.chat-page {
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
 }
 
 .logo-img {
@@ -52,6 +52,8 @@ body.chat-page {
   background: #111;
   padding: 10px 0;
   position: sticky;
+  z-index: 1000;
+  backdrop-filter: blur(5px)
 }
 
 .nav-link {
