@@ -51,9 +51,7 @@ body.chat-page {
   border-radius: 10px; 
   background: #111;
   padding: 10px 0;
-  position: sticky;
-  z-index: 1000;
-  backdrop-filter: blur(5px)
+
 }
 
 .nav-link {
