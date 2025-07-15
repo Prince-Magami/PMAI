@@ -6,9 +6,6 @@ import cohere
 import os
 import requests
 from dotenv import load_dotenv
-from fastapi.staticfiles import StaticFiles
-
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 
 load_dotenv()
