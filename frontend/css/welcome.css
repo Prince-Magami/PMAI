@@ -182,7 +182,7 @@ body.welcome-body {
 }
 
 .background-over lay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -191,6 +191,7 @@ body.welcome-body {
   opacity: 0.2;
   object-fit: cover;
 }
+
 /*  Footer */
 footer {
   background: #111;
