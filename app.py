@@ -8,7 +8,7 @@ import requests
 from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 
 load_dotenv()
