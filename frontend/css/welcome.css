@@ -23,6 +23,7 @@ body.welcome-body {
   background: rgba(0, 0, 0, 0.75);
   padding: 8px 20px;
   backdrop-filter: blur(2px);
+  position: sticky;
 }
 
 .logo-container {
@@ -57,6 +58,7 @@ body.welcome-body {
   border: 2px solid #00ffe0;
   border-radius: 10px; 
   padding: 10px 0;
+  position: sticky;
 }
 
 .nav-link {
