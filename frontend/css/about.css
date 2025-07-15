@@ -21,6 +21,7 @@ body.about-page {
   top: 0;
   z-index: 1000;
   backdrop-filter: blur(10px);
+  position: sticky;
 }
 
 .logo-img {
@@ -50,6 +51,7 @@ body.about-page {
   border-radius: 10px; 
   background: #111;
   padding: 10px 0;
+  position: sticky;
 }
 
 .nav-link {
