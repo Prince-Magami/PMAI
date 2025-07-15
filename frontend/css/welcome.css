@@ -184,16 +184,20 @@ body.welcome-body {
   transform: scale(1.05);
 }
 
-.background-over lay {
+.background-image {
   position: fixed;
-  margin-top: 0px;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -3;
-  opacity: 0.2;
-  object-fit: cover;
+  z-index: -1;
+  background-image: url("../assets/background.png");  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.2; 
+  pointer-events: none; 
 }
-
 /*  Footer */
 footer {
   background: #111;
