@@ -142,7 +142,7 @@ def format_link_report(scan):
         level = "EXTREMELY HIGH"
         recommendation = "AVOID THIS LINK"
 
-response = f"""
+response = f"""..."""
 <h3>LINK SCAN REPORT</h3>
 
 <table style="border-collapse: collapse; width: 100%;">
