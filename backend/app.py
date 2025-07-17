@@ -143,20 +143,38 @@ def format_link_report(scan):
         level = "EXTREMELY HIGH"
         recommendation = "AVOID THIS LINK 🚫"
 
-    return f"""🔗 LINK SCAN REPORT
+response = f"""
+<h3>🔗 LINK SCAN REPORT</h3>
 
-🌐 URL: {url_display}
+<table style="border-collapse: collapse; width: 100%;">
+    <tr>
+        <td><strong>🌐 URL:</strong></td>
+        <td>{url}</td>
+    </tr>
+    <tr>
+        <td><strong>🛡️ Trust Score:</strong></td>
+        <td>{trust_score}% Safe</td>
+    </tr>
+    <tr>
+        <td><strong>⚠️ Status:</strong></td>
+        <td>{status}</td>
+    </tr>
+    <tr>
+        <td><strong>📊 Confidence Level:</strong></td>
+        <td>{confidence}</td>
+    </tr>
+</table>
 
-🛡️ Trust Score: {trust_score}% Safe {status}
-⚠️ Status: {status}
+<h4>🧪 Detected Issues</h4>
+<ul>
+    <li>🔴 Malicious: {malicious}</li>
+    <li>🟠 Suspicious: {suspicious}</li>
+    <li>🟢 Harmless: {harmless}</li>
+    <li>⚪ Undetected: {undetected}</li>
+</ul>
 
-🧪 Detected Issues:
-- 🔴 Malicious: {malicious}
-- 🟠 Suspicious: {suspicious}
-- 🟢 Harmless: {harmless}
-- ⚪ Undetected: {undetected}
-
-📊 Confidence Level: {level}
+<p><strong>🧠 Recommendation:</strong> <span style="color:red; font-weight:bold;">AVOID THIS LINK 🚫</span></p>
+"""
 
 🧠 Recommendation: {recommendation}"""
 
