@@ -131,7 +131,7 @@ URL SCAN REPORT
 
 Link: {payload.message}
 
-Trust Score: {trust_score}% Safe {"" if trust_score > 80 else }
+Trust Score: {trust_score}% Safe {"✅" if trust_score > 80 else "❌"}
 Status: {"High Risk" if trust_score < 40 else "Moderate Risk" if trust_score < 80 else "Low Risk"}
 
 Detected Issues:
