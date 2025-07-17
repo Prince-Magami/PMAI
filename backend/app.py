@@ -166,10 +166,10 @@ response = f"""
 
 <h4>Detected Issues</h4>
 <ul>
-    <li>🔴 Malicious: {malicious}</li>
-    <li>🟠 Suspicious: {suspicious}</li>
-    <li>🟢 Harmless: {harmless}</li>
-    <li>⚪ Undetected: {undetected}</li>
+    <li>Malicious: {malicious}</li>
+    <li>Suspicious: {suspicious}</li>
+    <li>Harmless: {harmless}</li>
+    <li>Undetected: {undetected}</li>
 </ul>
 
 <p><strong>Recommendation:</strong> <span style="color:red; font-weight:bold;">AVOID THIS LINK</span></p>
