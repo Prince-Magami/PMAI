@@ -55,7 +55,6 @@ async def scan_link_with_virustotal(link: str):
 
         url_id = submit_response.json().get("data", {}).get("id")
 
-        # Get full report using /urls/{id} (not /analyses)
         report_response = await client.get(
             f"https://www.virustotal.com/api/v3/urls/{url_id}",
             headers=headers
@@ -74,7 +73,7 @@ async def scan_email(email: str):
         "status": "Safe",
         "issues": [],
         "confidence": "HIGH",
-        "recommendation": "No Action Needed ✅"
+        "recommendation": "No Action Needed"
     }
 
     issues = []
@@ -83,40 +82,40 @@ async def scan_email(email: str):
     impersonated_domains = ["paypal.com", "google.com", "apple.com", "facebook.com"]
     for legit in impersonated_domains:
         if legit != domain and legit.replace('.', '') in domain.replace('.', ''):
-            issues.append(f"🧠 Impersonation of \"{legit}\"")
+            issues.append(f"Impersonation of \"{legit}\"")
             result["trust_score"] -= 35
 
     if re.search(r"\d|paypa1|go0gle|faceb00k", domain):
-        issues.append("🔍 Unusual spelling in domain name")
+        issues.append("Unusual spelling in domain name")
         result["trust_score"] -= 30
 
     if "tracking" in email or "mailer@" in email:
-        issues.append("💬 Email header contains masked tracking")
+        issues.append("Email header contains masked tracking")
         result["trust_score"] -= 20
 
     if result["trust_score"] < 60:
         result["status"] = "High-risk email (Possible phishing attempt)"
         result["confidence"] = "EXTREMELY HIGH"
-        result["recommendation"] = "BLOCK & REPORT THIS EMAIL 🚫"
+        result["recommendation"] = "BLOCK & REPORT THIS EMAIL"
 
     result["issues"] = issues
     return result
 
 # --- Email Report Format ---
 def format_email_report(scan):
-    return f"""📧 EMAIL SCAN REPORT
+    return f""" EMAIL SCAN REPORT
 
-✉️ Email: {scan['email']}
+Email: {scan['email']}
 
-✅ Trust Score: {scan['trust_score']}% Safe {"✅" if scan['trust_score'] >= 60 else "❌"}
-⚠️ Status: {scan['status']}
+Trust Score: {scan['trust_score']}% Safe {"✅" if scan['trust_score'] >= 60 else "❌"}
+Status: {scan['status']}
 
-🧪 Detected Issues:
+Detected Issues:
 {''.join(f"- {issue}\n" for issue in scan['issues']) if scan['issues'] else "- None"}
 
-📊 Confidence Level: {scan['confidence']}
+Confidence Level: {scan['confidence']}
 
-🛡️ Recommendation: {scan['recommendation']}"""
+Recommendation: {scan['recommendation']}"""
 
 # --- Link Report Format ---
 def format_link_report(scan):
@@ -132,17 +131,17 @@ def format_link_report(scan):
     url_display = url_info.get("url", "Unknown URL")
 
     if trust_score >= 80:
-        status = "✅ Very Safe"
+        status = "Very Safe"
         level = "LOW"
-        recommendation = "You can trust this link ✅"
+        recommendation = "You can trust this link"
     elif trust_score >= 50:
-        status = "⚠️ Moderate Risk"
+        status = "Moderate Risk"
         level = "MEDIUM"
-        recommendation = "Use with caution ⚠️"
+        recommendation = "Use with caution "
     else:
-        status = "❌ High Risk"
+        status = "High Risk"
         level = "EXTREMELY HIGH"
-        recommendation = "AVOID THIS LINK 🚫"
+        recommendation = "AVOID THIS LINK"
 
 response = f"""
 <h3>🔗 LINK SCAN REPORT</h3>
@@ -153,20 +152,20 @@ response = f"""
         <td>{url}</td>
     </tr>
     <tr>
-        <td><strong>🛡️ Trust Score:</strong></td>
+        <td><strong>Trust Score:</strong></td>
         <td>{trust_score}% Safe</td>
     </tr>
     <tr>
-        <td><strong>⚠️ Status:</strong></td>
+        <td><strong>Status:</strong></td>
         <td>{status}</td>
     </tr>
     <tr>
-        <td><strong>📊 Confidence Level:</strong></td>
+        <td><strong>Confidence Level:</strong></td>
         <td>{confidence}</td>
     </tr>
 </table>
 
-<h4>🧪 Detected Issues</h4>
+<h4>Detected Issues</h4>
 <ul>
     <li>🔴 Malicious: {malicious}</li>
     <li>🟠 Suspicious: {suspicious}</li>
@@ -177,7 +176,7 @@ response = f"""
 <p><strong>🧠 Recommendation:</strong> <span style="color:red; font-weight:bold;">AVOID THIS LINK 🚫</span></p>
 """
 
-🧠 Recommendation: {recommendation}"""
+Recommendation: {recommendation}"""
 
 # === MAIN AI HANDLER ===
 @app.post("/ask")
@@ -194,9 +193,9 @@ async def ask_ai(req: PromptRequest):
             if scan:
                 return {"response": format_link_report(scan)}
             else:
-                return {"response": "❌ Unable to scan link. Please try again later."}
+                return {"response": "Unable to scan link. Please try again later."}
         else:
-            return {"response": "⚠️ Please enter a valid email or URL."}
+            return {"response": "Please enter a valid email or URL."}
 
     # === COHERE fallback ===
     if not COHERE_API_KEY:
@@ -217,4 +216,4 @@ async def ask_ai(req: PromptRequest):
             output = res.json().get("text") or res.json().get("response")
             return {"response": output}
         else:
-            return {"response": "❌ AI response failed. Please try again."}
+            return {"response": "AI response failed. Please try again."}
