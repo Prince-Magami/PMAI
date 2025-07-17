@@ -219,11 +219,9 @@ async def ask_ai(req: PromptRequest):
     # Handle "email/link scanner" mode
     if mode == "email/link scanner":
         if is_email(prompt):
-            # If the prompt is an email, scan it and return the formatted report
             result = await scan_email(prompt)
             return {"response": format_email_report(result)}
         elif prompt.startswith("http://") or prompt.startswith("https://"):
-            # If the prompt is a URL, scan it with VirusTotal and return the formatted report
             scan = await scan_link_with_virustotal(prompt)
             if scan:
                 return {"response": format_link_report(scan)}
@@ -234,17 +232,12 @@ async def ask_ai(req: PromptRequest):
             return {"response": "Please enter a valid email or URL."}
 
     # === COHERE fallback ===
-    # If not in "email/link scanner" mode, use Cohere API for general chat
-    if not COHERE_API_KEY:
-        return {"response": "Cohere API key not set."}
-
     headers = {
         "Authorization": f"Bearer {COHERE_API_KEY}",
         "Content-Type": "application/json"
     }
 
     async with httpx.AsyncClient() as client:
-        # Make a POST request to the Cohere chat API
         res = await client.post(
             "https://api.cohere.ai/v1/chat",
             headers=headers,
@@ -252,10 +245,8 @@ async def ask_ai(req: PromptRequest):
         )
         # Check if the Cohere API call was successful
         if res.status_code == 200:
-            # Extract the text response from Cohere
             output = res.json().get("text") or res.json().get("response")
             return {"response": output}
         else:
-            # Return an error message if the Cohere API call failed
             print(f"Cohere API error: {res.status_code} - {res.text}")
             return {"response": "AI response failed. Please try again."}
