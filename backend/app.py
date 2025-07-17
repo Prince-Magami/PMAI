@@ -87,19 +87,112 @@ def scan_with_virustotal(user_input: str):
 @app.post("/api/chat")
 async def chat_with_ai(payload: ChatRequest):
     if payload.mode == "scan":
-        result = scan_with_virustotal(payload.message)
-        return JSONResponse({"reply": result})
+        user_input = payload.message.strip()
+        vt_api_key = os.getenv("VT_API_KEY")
+        headers = {"x-apikey": vt_api_key}
+    
+        if "@" in user_input:
+            scan_type = "email"
+            domain = user_input.split("@")[-1]
+            vt_url = f"https://www.virustotal.com/api/v3/domains/{domain}"
+        else:
+            scan_type = "url"
+            # Clean URL
+            if not user_input.startswith("http"):
+                user_input = "http://" + user_input
+            vt_url = f"https://www.virustotal.com/api/v3/urls"
+        
+        try:
+            if scan_type == "url":
+                # Submit URL for analysis
+                submit_resp = requests.post(vt_url, headers=headers, data={"url": user_input})
+                scan_id = submit_resp.json()["data"]["id"]
+                vt_url = f"https://www.virustotal.com/api/v3/analyses/{scan_id}"
+                report_resp = requests.get(vt_url, headers=headers)
+            else:
+                # Email domain reputation
+                report_resp = requests.get(vt_url, headers=headers)
+            
+            report_data = report_resp.json()
+            
+            # Parse Report
+            if scan_type == "url":
+                stats = report_data["data"]["attributes"]["stats"]
+                malicious = stats.get("malicious", 0)
+                suspicious = stats.get("suspicious", 0)
+                harmless = stats.get("harmless", 0)
+                undetected = stats.get("undetected", 0)
+                
+                total = malicious + suspicious + harmless + undetected
+                trust_score = int((harmless / total) * 100) if total > 0 else 0
+                
+                report = f"""
+URL SCAN REPORT
 
-    # All other modes use Cohere
-    prompt = build_prompt(payload.mode, payload.lang, payload.message)
-    response = co.generate(
-        model="command-r-plus",
-        prompt=prompt,
-        max_tokens=300,
-        temperature=0.7,
-        stop_sequences=["User:", "AI:"]
-    )
-    return JSONResponse({"reply": response.generations[0].text.strip()})
+Link: {payload.message}
+
+Trust Score: {trust_score}% Safe {"" if trust_score > 80 else }
+Status: {"High Risk" if trust_score < 40 else "Moderate Risk" if trust_score < 80 else "Low Risk"}
+
+Detected Issues:
+- {malicious} flagged as malicious
+- {suspicious} flagged as suspicious
+- {harmless} marked harmless
+- {undetected} unknown by engines
+
+Confidence Level: {"EXTREMELY HIGH" if malicious else "MEDIUM"}
+
+Recommendation: {"AVOID OR REPORT THIS LINK" if trust_score < 50 else "Use with Caution "}
+""".strip()
+            else:
+                # EMAIL scan (domain reputation)
+                reputation = report_data["data"]["attributes"].get("reputation", 0)
+                categories = report_data["data"]["attributes"].get("categories", {})
+                trust_score = 50 + reputation * 10
+                risk = "High-risk email (Possible phishing attempt)" if trust_score < 50 else "Suspicious Email" if trust_score < 80 else "Likely Safe"
+
+                report = f"""
+EMAIL SCAN REPORT
+
+Email: {payload.message}
+
+Trust Score: {trust_score}% Safe {"" if trust_score >= 80 else ""}
+Status: {risk}
+
+Detected Issues:
+- Domain reputation score: {reputation}
+- Categories: {', '.join(categories.values()) if categories else "None detected"}
+
+Confidence Level: {"EXTREMELY HIGH" if trust_score < 30 else "HIGH" if trust_score < 60 else "MEDIUM"}
+
+Recommendation: {"BLOCK & REPORT THIS EMAIL" if trust_score < 50 else "Verify before trusting"}
+""".strip()
+            return JSONResponse({"reply": report})
+
+        except Exception as e:
+            
+            fallback_prompt = build_prompt("scan", payload.lang, payload.message)
+            response = co.generate(
+                model="command-r-plus",
+                prompt=fallback_prompt,
+                max_tokens=300,
+                temperature=0.7,
+                stop_sequences=["User:", "AI:"]
+            )
+            return JSONResponse({"reply": f"VirusTotal scan failed. Here's AI fallback:\n\n{response.generations[0].text.strip()}"})
+    
+    else:
+        # Other modes use Cohere
+        prompt = build_prompt(payload.mode, payload.lang, payload.message)
+        response = co.generate(
+            model="command-r-plus",
+            prompt=prompt,
+            max_tokens=300,
+            temperature=0.7,
+            stop_sequences=["User:", "AI:"]
+        )
+        return JSONResponse({"reply": response.generations[0].text.strip()})
+
 
 # Health Check
 @app.get("/")
