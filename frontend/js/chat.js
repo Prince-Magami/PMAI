@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function appendMessage(sender, text) {
     const msg = document.createElement("div");
     msg.classList.add("message", sender);
-    msg.textContent = text;
+    msg.innerHTML = text;
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
