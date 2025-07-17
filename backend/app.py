@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import base64
@@ -144,11 +143,11 @@ def format_link_report(scan):
         recommendation = "AVOID THIS LINK"
 
 response = f"""
-<h3>🔗 LINK SCAN REPORT</h3>
+<h3>LINK SCAN REPORT</h3>
 
 <table style="border-collapse: collapse; width: 100%;">
     <tr>
-        <td><strong>🌐 URL:</strong></td>
+        <td><strong>URL:</strong></td>
         <td>{url}</td>
     </tr>
     <tr>
@@ -173,7 +172,7 @@ response = f"""
     <li>⚪ Undetected: {undetected}</li>
 </ul>
 
-<p><strong>🧠 Recommendation:</strong> <span style="color:red; font-weight:bold;">AVOID THIS LINK 🚫</span></p>
+<p><strong>Recommendation:</strong> <span style="color:red; font-weight:bold;">AVOID THIS LINK</span></p>
 """
 
 Recommendation: {recommendation}"""
