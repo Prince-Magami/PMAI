@@ -1,61 +1,70 @@
 import os
 import re
+import base64
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import cohere 
+import cohere
 
 load_dotenv()
 
 app = FastAPI()
 
-# Allow frontend requests
+# Allow all CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust as needed
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Get API keys
+# API Keys
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 
-# Request model
 class PromptRequest(BaseModel):
     prompt: str
     mode: str
     language: str
 
-# Function to check if it's a valid email
+# Email check
 def is_email(input_str: str) -> bool:
     return re.match(r"[^@]+@[^@]+\.[^@]+", input_str) is not None
 
-# VirusTotal URL scanner
+# --- VirusTotal LINK SCAN ---
 async def scan_link_with_virustotal(link: str):
     headers = {
         "x-apikey": VIRUSTOTAL_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
     }
+
     async with httpx.AsyncClient() as client:
-        response = await client.post(
+        # Submit the URL
+        submit_response = await client.post(
             "https://www.virustotal.com/api/v3/urls",
             headers=headers,
             data=f"url={link}"
         )
-        if response.status_code == 200:
-            analysis_id = response.json()["data"]["id"]
-            report = await client.get(
-                f"https://www.virustotal.com/api/v3/analyses/{analysis_id}",
-                headers=headers
-            )
-            return report.json()
+
+        if submit_response.status_code != 200:
+            return None
+
+        url_id = submit_response.json().get("data", {}).get("id")
+
+        # Get full report using /urls/{id} (not /analyses)
+        report_response = await client.get(
+            f"https://www.virustotal.com/api/v3/urls/{url_id}",
+            headers=headers
+        )
+
+        if report_response.status_code == 200:
+            return report_response.json()
         return None
 
-# VirusTotal email detection logic (simulate phishing checks)
+# --- Email SCAN logic ---
 async def scan_email(email: str):
     domain = email.split('@')[-1].lower()
     result = {
@@ -69,7 +78,7 @@ async def scan_email(email: str):
 
     issues = []
 
-    # Detect impersonation of known services
+    # Impersonation check
     impersonated_domains = ["paypal.com", "google.com", "apple.com", "facebook.com"]
     for legit in impersonated_domains:
         if legit != domain and legit.replace('.', '') in domain.replace('.', ''):
@@ -92,7 +101,7 @@ async def scan_email(email: str):
     result["issues"] = issues
     return result
 
-# Format for email report
+# --- Email Report Format ---
 def format_email_report(scan):
     return f"""📧 EMAIL SCAN REPORT
 
@@ -108,25 +117,18 @@ def format_email_report(scan):
 
 🛡️ Recommendation: {scan['recommendation']}"""
 
-# Format for link report
-import base64
-
+# --- Link Report Format ---
 def format_link_report(scan):
-    # Decode original URL from the scan ID (which is base64 encoded)
-    scan_id = scan.get("meta", {}).get("url_info", {}).get("id", "")
-    try:
-        decoded_url = base64.urlsafe_b64decode(scan_id + '==').decode()
-    except Exception:
-        decoded_url = "Unknown"
-
-    stats = scan.get("data", {}).get("attributes", {}).get("stats", {})
+    stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
+    url_info = scan.get("data", {}).get("attributes", {})
     harmless = stats.get("harmless", 0)
     malicious = stats.get("malicious", 0)
     suspicious = stats.get("suspicious", 0)
     undetected = stats.get("undetected", 0)
     total = harmless + malicious + suspicious + undetected + 1
-
     trust_score = round((harmless / total) * 100)
+
+    url_display = url_info.get("url", "Unknown URL")
 
     if trust_score >= 80:
         status = "✅ Very Safe"
@@ -143,7 +145,7 @@ def format_link_report(scan):
 
     return f"""🔗 LINK SCAN REPORT
 
-🌐 URL: {decoded_url}
+🌐 URL: {url_display}
 
 🛡️ Trust Score: {trust_score}% Safe {status}
 ⚠️ Status: {status}
@@ -158,14 +160,12 @@ def format_link_report(scan):
 
 🧠 Recommendation: {recommendation}"""
 
-
-# Main AI logic
+# === MAIN AI HANDLER ===
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
     mode = req.mode.lower()
 
-    # === MODE: EMAIL/LINK SCANNER ===
     if mode == "email/link scanner":
         if is_email(prompt):
             result = await scan_email(prompt)
@@ -179,18 +179,21 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "⚠️ Please enter a valid email or URL."}
 
-    # === FALLBACK TO DEFAULT (COHERE AI) ===
+    # === COHERE fallback ===
     if not COHERE_API_KEY:
         return {"response": "Cohere API key not set."}
 
-    cohere_url = "https://api.cohere.ai/v1/chat"
     headers = {
         "Authorization": f"Bearer {COHERE_API_KEY}",
         "Content-Type": "application/json"
     }
 
     async with httpx.AsyncClient() as client:
-        res = await client.post(cohere_url, headers=headers, json={"message": prompt})
+        res = await client.post(
+            "https://api.cohere.ai/v1/chat",
+            headers=headers,
+            json={"message": prompt}
+        )
         if res.status_code == 200:
             output = res.json().get("text") or res.json().get("response")
             return {"response": output}
