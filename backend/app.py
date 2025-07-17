@@ -109,32 +109,55 @@ def format_email_report(scan):
 🛡️ Recommendation: {scan['recommendation']}"""
 
 # Format for link report
+import base64
+
 def format_link_report(scan):
+    # Decode original URL from the scan ID (which is base64 encoded)
+    scan_id = scan.get("meta", {}).get("url_info", {}).get("id", "")
+    try:
+        decoded_url = base64.urlsafe_b64decode(scan_id + '==').decode()
+    except Exception:
+        decoded_url = "Unknown"
+
     stats = scan.get("data", {}).get("attributes", {}).get("stats", {})
     harmless = stats.get("harmless", 0)
     malicious = stats.get("malicious", 0)
     suspicious = stats.get("suspicious", 0)
-    total = harmless + malicious + suspicious + stats.get("undetected", 0) + 1
+    undetected = stats.get("undetected", 0)
+    total = harmless + malicious + suspicious + undetected + 1
 
     trust_score = round((harmless / total) * 100)
 
-    result = f"""🔗 LINK SCAN REPORT
+    if trust_score >= 80:
+        status = "✅ Very Safe"
+        level = "LOW"
+        recommendation = "You can trust this link ✅"
+    elif trust_score >= 50:
+        status = "⚠️ Moderate Risk"
+        level = "MEDIUM"
+        recommendation = "Use with caution ⚠️"
+    else:
+        status = "❌ High Risk"
+        level = "EXTREMELY HIGH"
+        recommendation = "AVOID THIS LINK 🚫"
 
-🌍 URL: {scan.get('meta', {}).get('url_info', {}).get('url', 'N/A')}
+    return f"""🔗 LINK SCAN REPORT
 
-✅ Trust Score: {trust_score}% Safe {"✅" if trust_score >= 60 else "❌"}
-⚠️ Status: {"Malicious or Suspicious" if trust_score < 60 else "Likely Safe"}
+🌐 URL: {decoded_url}
 
-🧪 Reported:
-- 🧨 Malicious: {malicious}
-- 🚧 Suspicious: {suspicious}
-- 🛡️ Harmless: {harmless}
+🛡️ Trust Score: {trust_score}% Safe {status}
+⚠️ Status: {status}
 
-📊 Confidence Level: {"HIGH" if trust_score >= 70 else "LOW"}
+🧪 Detected Issues:
+- 🔴 Malicious: {malicious}
+- 🟠 Suspicious: {suspicious}
+- 🟢 Harmless: {harmless}
+- ⚪ Undetected: {undetected}
 
-🛡️ Recommendation: {"AVOID THIS LINK 🚫" if trust_score < 60 else "Looks Safe ✅"}"""
+📊 Confidence Level: {level}
 
-    return result
+🧠 Recommendation: {recommendation}"""
+
 
 # Main AI logic
 @app.post("/ask")
