@@ -1,7 +1,7 @@
 # PMAI
 # README.md
 
-#  PMAI – Prince Magami AI Web App
+#  PMAI – Prince Magami AI 
 
 PMAI is a fast, interactive AI-powered web app built with FastAPI and vanilla frontend tools. It combines multiple modes into a single experience:
 
