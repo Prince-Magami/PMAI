@@ -159,12 +159,17 @@ appendMessage('bot', reply);
   }
 
 
- function formatScannerReply(text) {
+function formatScannerReply(text) {
+  if (text.includes("Scan failed") || text.includes("no result")) {
+    return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
+  }
+
   const scoreMatch = text.match(/Trust Score: (\d+)%/);
   const statusMatch = text.match(/Status: (.+?)<br>/i);
   const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
   const status = statusMatch ? statusMatch[1] : "Unknown";
-  return `<b>${status}</b><br>${text}`;
+
+  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score ?? "N/A"}%`;
 }
 
   // Allow Enter to send
