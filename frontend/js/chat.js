@@ -123,9 +123,14 @@ document.addEventListener("DOMContentLoaded", () => {
       let reply;
 
       if (mode === 'scan') {
-        reply = formatScannerReply(data.response || "Scan failed.");
+        if (data.scan_result) {
+          const { status, trust_score, risk_score } = data.scan_result;
+          reply = `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${trust_score}%<br><b>Risk Score:</b> ${risk_score}%`;
+        } else {
+          reply = `<span style="color:red">Scan failed or could not analyze this link or email.</span>`;
+        }
       } else {
-        reply = data.reply || "No response from AI.";
+        reply = data.response || "No response from AI.";
       }
 
       appendMessage('bot', reply);
@@ -148,25 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.appendChild(msg);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
-
- function formatScannerReply(rawHtml) {
-  if (!rawHtml || rawHtml.includes("Scan failed")) {
-    return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
-  }
-
-  const temp = document.createElement("div");
-  temp.innerHTML = rawHtml;
-
-  const text = temp.textContent || temp.innerText || "";
-  const statusMatch = text.match(/Status:\s*([^\n<]+)/i);
-  const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
-
-  const status = statusMatch ? statusMatch[1].trim() : "Unknown";
-  const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
-
-  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
-}
-
 
   chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
