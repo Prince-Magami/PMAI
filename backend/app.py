@@ -6,6 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from urllib.parse import urlparse
+
+def extract_domain(url: str) -> str:
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}"
 
 load_dotenv()
 
@@ -108,14 +113,14 @@ async def ask_ai(req: PromptRequest):
             else:
                 return {"response": "<span style='color:red'>Unable to scan email domain.</span>"}
 
-        elif prompt.startswith("http://") or prompt.startswith("https://"):
-            vt_link_scan = await scan_link_with_virustotal(prompt)
-            if vt_link_scan:
-                return {"response": format_link_report(vt_link_scan)}
-            else:
-                return {"response": "<span style='color:red'>Unable to scan link.</span>"}
-        
-        return {"response": "<span style='color:red'>Please enter a valid email or URL.</span>"}
+     elif prompt.startswith("http://") or prompt.startswith("https://"):
+    domain_only = extract_domain(prompt)
+    scan_result = await scan_link_with_virustotal(domain_only)
+    if scan_result:
+        return {"response": format_link_report(scan_result)}
+    else:
+        return {"response": "<span style='color:red'>Scan failed or no result. This may be a deep or unindexed link.</span>"}
+
 
     # GEMINI MODE (chat only, not used for scans)
     headers = {
