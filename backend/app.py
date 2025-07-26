@@ -95,4 +95,59 @@ def format_link_report(scan: dict) -> str:
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
-    mode = r
+    mode = req.mode.lower()
+
+    if mode == "email/link scanner":
+        if is_email(prompt):
+            ipqs_result = await scan_email_with_ipqs(prompt)
+            valid_mx = validate_email_mx(prompt)
+            if ipqs_result:
+                return {"response": format_email_report(prompt, valid_mx, ipqs_result)}
+            else:
+                return {
+                    "response": "<span style='color:red'>Scan failed or could not analyze this email. It may be too new, private, or malformed.</span>"
+                }
+
+        elif is_url(prompt):
+            clean_url = extract_domain(prompt)
+            scan_result = await scan_link_with_ipqs(clean_url)
+            if scan_result:
+                return {"response": format_link_report(scan_result)}
+            else:
+                return {
+                    "response": "<span style='color:red'>Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>"
+                }
+
+        else:
+            return {"response": "Please enter a valid email or URL."}
+
+    # Gemini fallback
+    headers = {
+        "Authorization": f"Bearer {GEMINI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    async with httpx.AsyncClient() as client:
+        res = await client.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}",
+            headers=headers,
+            json={"contents": [{"parts": [{"text": prompt}]}]}
+        )
+        if res.status_code == 200:
+            candidates = res.json().get("candidates", [])
+            output = candidates[0]["content"]["parts"][0]["text"] if candidates else "No response from Gemini."
+            return {"response": output}
+        else:
+            return {"response": "Gemini API failed. Please try again."}
+
+# Alias route
+@app.post("/api/chat")
+async def alias_chat_route(req: dict):
+    prompt = req.get("message", "").strip()
+    mode = req.get("mode", "").strip().lower()
+    lang = req.get("lang", "").strip().lower()
+
+    if mode == "scan":
+        mode = "email/link scanner"
+
+    proxy_req = PromptRequest(prompt=prompt, mode=mode, language=lang)
+    return await ask_ai(proxy_req)
