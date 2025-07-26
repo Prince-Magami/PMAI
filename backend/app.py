@@ -13,7 +13,6 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 IPQS_API_KEY = os.getenv("IPQS_API_KEY")
 
-# FastAPI setup
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -47,7 +46,7 @@ def validate_email_mx(email: str) -> bool:
     except Exception:
         return False
 
-# ✅ Debug-friendly IPQS functions
+# API integrations
 async def scan_link_with_ipqs(link: str):
     encoded_link = quote(link, safe='')
     url = f"https://ipqualityscore.com/api/json/url/{IPQS_API_KEY}/{encoded_link}"
@@ -58,9 +57,7 @@ async def scan_link_with_ipqs(link: str):
         print(response.text)
         if response.status_code != 200:
             return None
-        data = response.json()
-        # ✅ Allow response even if success=False
-        return data
+        return response.json()
 
 async def scan_email_with_ipqs(email: str):
     encoded_email = quote(email, safe='')
@@ -72,11 +69,9 @@ async def scan_email_with_ipqs(email: str):
         print(response.text)
         if response.status_code != 200:
             return None
-        data = response.json()
-        # ✅ Allow response even if success=False
-        return data
+        return response.json()
 
-# Formatters with fallback
+# Result formatters
 def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
     fraud_score = ipqs_data.get("fraud_score", 0)
     valid = ipqs_data.get("valid", False)
@@ -84,19 +79,17 @@ def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
     return f"{color}Status: {risk}</span>"
 
-def format_link_report(scan: dict) -> str:
-    risk_score = scan.get("risk_score", 0)
-    if risk_score is None:
-        risk_score = 0
-
+def format_link_report(scan: dict) -> dict:
+    risk_score = scan.get("risk_score", 0) or 0
     trust_score = 100 - risk_score
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
-    color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
+    return {
+        "status": status,
+        "trust_score": trust_score,
+        "risk_score": risk_score
+    }
 
-    return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
-
-
-# Main AI logic
+# AI core
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -117,7 +110,10 @@ async def ask_ai(req: PromptRequest):
             clean_url = extract_domain(prompt)
             scan_result = await scan_link_with_ipqs(clean_url)
             if scan_result:
-                return {"response": format_link_report(scan_result)}
+                return {
+                    "status": "success",
+                    "scan_result": format_link_report(scan_result)
+                }
             else:
                 return {
                     "response": "<span style='color:red'>Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>"
@@ -144,7 +140,6 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Gemini API failed. Please try again."}
 
-# Alias route
 @app.post("/api/chat")
 async def alias_chat_route(req: dict):
     prompt = req.get("message", "").strip()
