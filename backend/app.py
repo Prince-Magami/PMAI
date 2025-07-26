@@ -8,18 +8,13 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 
-def extract_domain(url: str) -> str:
-    parsed = urlparse(url)
-    return f"{parsed.scheme}://{parsed.netloc}"
-
+# Load environment variables
 load_dotenv()
-
-# Load API Keys from environment
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 
+# FastAPI App Setup
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,8 +28,24 @@ class PromptRequest(BaseModel):
     mode: str
     language: str
 
-def is_email(input_str: str) -> bool:
-    return re.match(r"[^@]+@[^@]+\.[^@]+", input_str) is not None
+# Helpers
+def is_email(text: str) -> bool:
+    return re.match(r"[^@]+@[^@]+\.[^@]+", text) is not None
+
+def is_url(text: str) -> bool:
+    return re.match(r"^(https?:\/\/)?([\w\-]+\.)+[\w\-]+.*$", text) is not None
+
+def extract_domain(url: str) -> str:
+    parsed = urlparse(url if url.startswith("http") else f"http://{url}")
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+def validate_email_mx(email: str) -> bool:
+    domain = email.split('@')[-1].lower()
+    try:
+        dns.resolver.resolve(domain, 'MX')
+        return True
+    except Exception:
+        return False
 
 async def scan_link_with_virustotal(link: str):
     headers = {
@@ -58,27 +69,16 @@ async def scan_link_with_virustotal(link: str):
         )
         return report_response.json() if report_response.status_code == 200 else None
 
-def validate_email_mx(email: str):
-    domain = email.split('@')[-1].lower()
-    try:
-        dns.resolver.resolve(domain, 'MX')
-        return True
-    except Exception:
-        return False
-
-def format_email_report(email: str, valid_mx: bool, vt_data: dict):
-    domain = email.split("@")[1].lower()
+# Formatters
+def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
     domain_info = vt_data.get("data", {}).get("attributes", {})
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
-
     risk = "High Risk" if malicious > 0 or not valid_mx else "Safe"
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
+    return f"{color}Status: {risk}</span>"
 
-    return f"""{color}Email: {email}<br>Status: {risk}<br>Threats Detected: {malicious}</span>"""
-
-def format_link_report(scan):
+def format_link_report(scan: dict) -> str:
     stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
-    url_info = scan.get("data", {}).get("attributes", {})
     harmless = stats.get("harmless", 0)
     malicious = stats.get("malicious", 0)
     suspicious = stats.get("suspicious", 0)
@@ -87,9 +87,9 @@ def format_link_report(scan):
     trust_score = round((harmless / total) * 100) if total > 0 else 0
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
+    return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
 
-    return f"""{color}URL: {url_info.get('url', 'Unknown')}<br>Status: {status}<br>Trust Score: {trust_score}%</span>"""
-
+# Main API Route
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -98,13 +98,13 @@ async def ask_ai(req: PromptRequest):
     if mode == "email/link scanner":
         if is_email(prompt):
             domain = prompt.split("@")[1]
-            vt_domain_scan = await scan_link_with_virustotal(f"http://{domain}")
+            vt_result = await scan_link_with_virustotal(f"http://{domain}")
             valid_mx = validate_email_mx(prompt)
-            return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
+            return {"response": format_email_report(prompt, valid_mx, vt_result)}
 
-        elif prompt.startswith("http://") or prompt.startswith("https://"):
-            domain_only = extract_domain(prompt)
-            scan_result = await scan_link_with_virustotal(domain_only)
+        elif is_url(prompt):
+            clean_url = extract_domain(prompt)
+            scan_result = await scan_link_with_virustotal(clean_url)
             if scan_result:
                 return {"response": format_link_report(scan_result)}
             else:
@@ -115,12 +115,11 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-    # GEMINI MODE (chat only)
+    # GEMINI MODE: fallback for regular prompts
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
     }
-
     async with httpx.AsyncClient() as client:
         res = await client.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}",
