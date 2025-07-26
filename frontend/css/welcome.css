@@ -13,6 +13,7 @@ body.welcome-body {
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
+  background-color: black;
 }
 
 /* Logo Bar */
