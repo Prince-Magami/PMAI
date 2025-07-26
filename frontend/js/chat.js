@@ -149,20 +149,24 @@ document.addEventListener("DOMContentLoaded", () => {
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
-  // ✅ UPDATED formatScannerReply with correct parsing
-  function formatScannerReply(text) {
-    if (!text || text.includes("Scan failed") || text.includes("no result")) {
-      return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
-    }
-
-    const statusMatch = text.match(/Status:\s*([^<]+)/i);
-    const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
-
-    const status = statusMatch ? statusMatch[1].trim() : "Unknown";
-    const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
-
-    return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
+ function formatScannerReply(rawHtml) {
+  if (!rawHtml || rawHtml.includes("Scan failed")) {
+    return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
   }
+
+  const temp = document.createElement("div");
+  temp.innerHTML = rawHtml;
+
+  const text = temp.textContent || temp.innerText || "";
+  const statusMatch = text.match(/Status:\s*([^\n<]+)/i);
+  const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
+
+  const status = statusMatch ? statusMatch[1].trim() : "Unknown";
+  const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
+
+  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
+}
+
 
   chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
