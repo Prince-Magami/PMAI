@@ -160,17 +160,20 @@ appendMessage('bot', reply);
 
 
 function formatScannerReply(text) {
-  if (text.includes("Scan failed") || text.includes("no result")) {
+  if (!text || text.includes("Scan failed") || text.includes("no result")) {
     return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
   }
 
-  const scoreMatch = text.match(/Trust Score: (\d+)%/);
-  const statusMatch = text.match(/Status: (.+?)<br>/i);
-  const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
-  const status = statusMatch ? statusMatch[1] : "Unknown";
+  // Extract from span-wrapped response
+  const statusMatch = text.match(/Status:\s*([^<]+)/i);
+  const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
 
-  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score ?? "N/A"}%`;
+  const status = statusMatch ? statusMatch[1].trim() : "Unknown";
+  const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
+
+  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
 }
+
 
 
   // Allow Enter to send
