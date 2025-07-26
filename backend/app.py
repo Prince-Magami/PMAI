@@ -2,7 +2,6 @@ import os
 import re
 import httpx
 import dns.resolver
-from base64 import urlsafe_b64encode
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -49,6 +48,7 @@ def validate_email_mx(email: str) -> bool:
     except Exception:
         return False
 
+# ✅ Correct VirusTotal scan logic (submit + use returned ID)
 async def scan_link_with_virustotal(link: str):
     headers = {
         "x-apikey": VIRUSTOTAL_API_KEY,
@@ -63,16 +63,17 @@ async def scan_link_with_virustotal(link: str):
         if submit_response.status_code != 200:
             return None
 
-        # Base64-encode the URL for scan report lookup
-        encoded_id = urlsafe_b64encode(link.encode()).decode().strip("=")
+        url_id = submit_response.json().get("data", {}).get("id")
+        if not url_id:
+            return None
 
         report_response = await client.get(
-            f"https://www.virustotal.com/api/v3/urls/{encoded_id}",
+            f"https://www.virustotal.com/api/v3/urls/{url_id}",
             headers=headers
         )
         return report_response.json() if report_response.status_code == 200 else None
 
-# Format response for emails
+# Format email analysis
 def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
     domain_info = vt_data.get("data", {}).get("attributes", {})
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
@@ -80,7 +81,7 @@ def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
     return f"{color}Status: {risk}</span>"
 
-# Format response for URLs
+# Format URL scan analysis
 def format_link_report(scan: dict) -> str:
     stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
     harmless = stats.get("harmless", 0)
@@ -93,7 +94,7 @@ def format_link_report(scan: dict) -> str:
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
     return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
 
-# Core route for all prompts
+# Core route
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -119,7 +120,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-    # GEMINI fallback for general chat
+    # Fallback to Gemini AI for general prompts
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -137,7 +138,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Gemini API failed. Please try again."}
 
-# Aliased route for frontend compatibility
+# Frontend alias route
 @app.post("/api/chat")
 async def alias_chat_route(req: dict):
     prompt = req.get("message", "").strip()
