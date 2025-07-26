@@ -107,19 +107,21 @@ async def ask_ai(req: PromptRequest):
         if is_email(prompt):
             domain = prompt.split("@")[1]
             vt_domain_scan = await scan_link_with_virustotal(f"http://{domain}")
-            valid_mx = validate_email_mx(prompt)
-            if vt_domain_scan:
-                return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
-            else:
-                return {"response": "<span style='color:red'>Unable to scan email domain.</span>"}
+            return {"response": format_email_report(prompt, vt_domain_scan)}
 
-     elif prompt.startswith("http://") or prompt.startswith("https://"):
-    domain_only = extract_domain(prompt)
-    scan_result = await scan_link_with_virustotal(domain_only)
-    if scan_result:
-        return {"response": format_link_report(scan_result)}
-    else:
-        return {"response": "<span style='color:red'>Scan failed or no result. This may be a deep or unindexed link.</span>"}
+        elif prompt.startswith("http://") or prompt.startswith("https://"):
+            domain_only = extract_domain(prompt)
+            scan_result = await scan_link_with_virustotal(domain_only)
+            if scan_result:
+                return {"response": format_link_report(scan_result)}
+            else:
+                return {
+                    "response": "<span style='color:red'>Scan failed or no result. This may be a deep or unindexed link.</span>"
+                }
+
+        else:
+            return {"response": "Please enter a valid email or URL."}
+
 
 
     # GEMINI MODE (chat only, not used for scans)
