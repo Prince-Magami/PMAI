@@ -6,12 +6,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 
 # Load environment variables
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-IPQS_API_KEY = os.getenv("IPQS_API_KEY")  # 👈 Use this instead of VIRUSTOTAL_API_KEY
+IPQS_API_KEY = os.getenv("IPQS_API_KEY")  # 👈 Make sure this is set in .env
 
 # FastAPI setup
 app = FastAPI()
@@ -23,13 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Request model
+# Request body model
 class PromptRequest(BaseModel):
     prompt: str
     mode: str
     language: str
 
-# Utils
+# Utility functions
 def is_email(text: str) -> bool:
     return re.match(r"[^@]+@[^@]+\.[^@]+", text) is not None
 
@@ -48,20 +48,28 @@ def validate_email_mx(email: str) -> bool:
     except Exception:
         return False
 
-# 🔁 IPQS replaces VirusTotal for both email + URL
+# IPQS integration
 async def scan_link_with_ipqs(link: str):
-    url = f"https://ipqualityscore.com/api/json/url/{IPQS_API_KEY}/{link}"
+    encoded_link = quote(link, safe='')
+    url = f"https://ipqualityscore.com/api/json/url/{IPQS_API_KEY}/{encoded_link}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
-        return response.json() if response.status_code == 200 else None
+        data = response.json() if response.status_code == 200 else None
+        if not data or not data.get("success", False):
+            return None
+        return data
 
 async def scan_email_with_ipqs(email: str):
-    url = f"https://ipqualityscore.com/api/json/email/{IPQS_API_KEY}/{email}"
+    encoded_email = quote(email, safe='')
+    url = f"https://ipqualityscore.com/api/json/email/{IPQS_API_KEY}/{encoded_email}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
-        return response.json() if response.status_code == 200 else None
+        data = response.json() if response.status_code == 200 else None
+        if not data or not data.get("success", False):
+            return None
+        return data
 
-# Formatters (unchanged)
+# Response formatters
 def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
     fraud_score = ipqs_data.get("fraud_score", 0)
     valid = ipqs_data.get("valid", False)
@@ -72,13 +80,12 @@ def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
 
 def format_link_report(scan: dict) -> str:
     risk_score = scan.get("risk_score", 0)
-    unsafe = scan.get("unsafe", False)
     trust_score = 100 - risk_score
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
     return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
 
-# Main AI endpoint
+# Main AI route
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -88,7 +95,12 @@ async def ask_ai(req: PromptRequest):
         if is_email(prompt):
             ipqs_result = await scan_email_with_ipqs(prompt)
             valid_mx = validate_email_mx(prompt)
-            return {"response": format_email_report(prompt, valid_mx, ipqs_result)}
+            if ipqs_result:
+                return {"response": format_email_report(prompt, valid_mx, ipqs_result)}
+            else:
+                return {
+                    "response": "<span style='color:red'>Scan failed or could not analyze this email. It may be too new, private, or malformed.</span>"
+                }
 
         elif is_url(prompt):
             clean_url = extract_domain(prompt)
@@ -103,7 +115,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-    # Gemini Fallback
+    # Gemini fallback
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -121,7 +133,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Gemini API failed. Please try again."}
 
-# Alias route for frontend
+# Frontend alias route
 @app.post("/api/chat")
 async def alias_chat_route(req: dict):
     prompt = req.get("message", "").strip()
@@ -133,3 +145,4 @@ async def alias_chat_route(req: dict):
 
     proxy_req = PromptRequest(prompt=prompt, mode=mode, language=lang)
     return await ask_ai(proxy_req)
+
