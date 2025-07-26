@@ -127,12 +127,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) throw new Error("Response not OK");
 
-      const data = await res.json();
-      let reply = data.reply || "No response from AI.";
+const data = await res.json();
+let reply;
 
-      if (mode === 'scan') reply = formatScannerReply(reply);
+if (mode === 'scan') {
+  reply = formatScannerReply(data.response || "Scan failed.");
+} else {
+  reply = data.reply || "No response from AI.";
+}
 
-      appendMessage('bot', reply);
+appendMessage('bot', reply);
+
     } catch (err) {
       console.error("Error from API:", err);
       appendMessage('bot', 'Something went wrong. Try again.');
@@ -154,11 +159,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  function formatScannerReply(text) {
-    const match = text.match(/(\d+)%/);
-    const score = match ? parseInt(match[1]) : null;
-    return score ? `Trust Score: ${score}%\nAnalysis: ${text}` : text;
-  }
+ function formatScannerReply(text) {
+  const scoreMatch = text.match(/Trust Score: (\d+)%/);
+  const statusMatch = text.match(/Status: (.+?)<br>/i);
+  const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+  const status = statusMatch ? statusMatch[1] : "Unknown";
+  return `<b>${status}</b><br>${text}`;
+}
 
   // Allow Enter to send
   chatInput.addEventListener("keydown", function (e) {
