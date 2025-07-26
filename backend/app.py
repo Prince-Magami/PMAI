@@ -106,18 +106,18 @@ async def ask_ai(req: PromptRequest):
             if vt_domain_scan:
                 return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
             else:
-                return {"response": "Unable to scan email domain at the moment."}
+                return {"response": "<span style='color:red'>Unable to scan email domain.</span>"}
 
         elif prompt.startswith("http://") or prompt.startswith("https://"):
-            scan = await scan_link_with_virustotal(prompt)
-            if scan:
-                return {"response": format_link_report(scan)}
+            vt_link_scan = await scan_link_with_virustotal(prompt)
+            if vt_link_scan:
+                return {"response": format_link_report(vt_link_scan)}
             else:
-                return {"response": "Unable to scan link. Please try again later."}
-        else:
-            return {"response": "Please enter a valid email or URL."}
+                return {"response": "<span style='color:red'>Unable to scan link.</span>"}
+        
+        return {"response": "<span style='color:red'>Please enter a valid email or URL.</span>"}
 
-    # GEMINI chat mode
+    # GEMINI MODE (chat only, not used for scans)
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -135,3 +135,4 @@ async def ask_ai(req: PromptRequest):
             return {"response": output}
         else:
             return {"response": "Gemini API failed. Please try again."}
+
