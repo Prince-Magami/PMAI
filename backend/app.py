@@ -1,5 +1,3 @@
-# ✅ Full FastAPI Code: Gemini for chat, VirusTotal for link scan, DNS-based email validation
-
 import os
 import re
 import httpx
@@ -38,21 +36,17 @@ async def scan_link_with_virustotal(link: str):
         "x-apikey": VIRUSTOTAL_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
     }
-
     async with httpx.AsyncClient() as client:
         submit_response = await client.post(
             "https://www.virustotal.com/api/v3/urls",
             headers=headers,
             data=f"url={link}"
         )
-
         if submit_response.status_code != 200:
             return None
-
         url_id = submit_response.json().get("data", {}).get("id")
         if not url_id:
             return None
-
         report_response = await client.get(
             f"https://www.virustotal.com/api/v3/urls/{url_id}",
             headers=headers
@@ -73,17 +67,12 @@ def format_email_report(email: str, valid_mx: bool, vt_data: dict):
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
 
     risk = "High Risk" if malicious > 0 or not valid_mx else "Safe"
+    color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
 
     return f"""
-EMAIL SCAN REPORT
-------------------
-Email: {email}
-
-DNS MX Check: {'✅ MX records found' if valid_mx else '❌ No MX records (invalid domain)'}
-VirusTotal Domain Threats: {malicious}
-
-Status: {risk}
-Recommendation: {'Do not trust this email' if risk == 'High Risk' else 'No issues detected'}
+{color}Email: {email}<br>
+Status: {risk}<br>
+Threats Detected: {malicious}</span>
 """
 
 def format_link_report(scan):
@@ -95,19 +84,13 @@ def format_link_report(scan):
     undetected = stats.get("undetected", 0)
     total = harmless + malicious + suspicious + undetected
     trust_score = round((harmless / total) * 100) if total > 0 else 0
-    url_display = url_info.get("url", "Unknown URL")
-    status = "Very Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "High Risk"
-    recommendation = "Use with caution" if trust_score >= 50 else "Avoid this link"
+    status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
+    color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
 
     return f"""
-LINK SCAN REPORT
------------------
-URL: {url_display}
-Trust Score: {trust_score}%
-Malicious: {malicious}, Suspicious: {suspicious}, Harmless: {harmless}, Undetected: {undetected}
-
-Status: {status}
-Recommendation: {recommendation}
+{color}URL: {url_info.get('url', 'Unknown URL')}<br>
+Status: {status}<br>
+Trust Score: {trust_score}%</span>
 """
 
 @app.post("/ask")
@@ -120,7 +103,6 @@ async def ask_ai(req: PromptRequest):
             domain = prompt.split("@")[1]
             vt_domain_scan = await scan_link_with_virustotal(f"http://{domain}")
             valid_mx = validate_email_mx(prompt)
-
             if vt_domain_scan:
                 return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
             else:
