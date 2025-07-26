@@ -172,6 +172,7 @@ function formatScannerReply(text) {
   return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score ?? "N/A"}%`;
 }
 
+
   // Allow Enter to send
   chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
