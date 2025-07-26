@@ -59,7 +59,7 @@ async def scan_link_with_virustotal(link: str):
         return report_response.json() if report_response.status_code == 200 else None
 
 def validate_email_mx(email: str):
-    domain = email.split('@')[-1]
+    domain = email.split('@')[-1].lower()
     try:
         dns.resolver.resolve(domain, 'MX')
         return True
@@ -67,18 +67,14 @@ def validate_email_mx(email: str):
         return False
 
 def format_email_report(email: str, valid_mx: bool, vt_data: dict):
-    domain = email.split("@")[1]
+    domain = email.split("@")[1].lower()
     domain_info = vt_data.get("data", {}).get("attributes", {})
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
 
     risk = "High Risk" if malicious > 0 or not valid_mx else "Safe"
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
 
-    return f"""
-{color}Email: {email}<br>
-Status: {risk}<br>
-Threats Detected: {malicious}</span>
-"""
+    return f"""{color}Email: {email}<br>Status: {risk}<br>Threats Detected: {malicious}</span>"""
 
 def format_link_report(scan):
     stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
@@ -92,11 +88,7 @@ def format_link_report(scan):
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
 
-    return f"""
-{color}URL: {url_info.get('url', 'Unknown URL')}<br>
-Status: {status}<br>
-Trust Score: {trust_score}%</span>
-"""
+    return f"""{color}URL: {url_info.get('url', 'Unknown')}<br>Status: {status}<br>Trust Score: {trust_score}%</span>"""
 
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
@@ -107,7 +99,8 @@ async def ask_ai(req: PromptRequest):
         if is_email(prompt):
             domain = prompt.split("@")[1]
             vt_domain_scan = await scan_link_with_virustotal(f"http://{domain}")
-            return {"response": format_email_report(prompt, vt_domain_scan)}
+            valid_mx = validate_email_mx(prompt)
+            return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
 
         elif prompt.startswith("http://") or prompt.startswith("https://"):
             domain_only = extract_domain(prompt)
@@ -122,9 +115,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-
-
-    # GEMINI MODE (chat only, not used for scans)
+    # GEMINI MODE (chat only)
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -142,4 +133,3 @@ async def ask_ai(req: PromptRequest):
             return {"response": output}
         else:
             return {"response": "Gemini API failed. Please try again."}
-
