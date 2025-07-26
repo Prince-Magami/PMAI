@@ -13,7 +13,7 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 
-# FastAPI App Setup
+# FastAPI setup
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -23,12 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Request body model
 class PromptRequest(BaseModel):
     prompt: str
     mode: str
     language: str
 
-# Helpers
+# Utils
 def is_email(text: str) -> bool:
     return re.match(r"[^@]+@[^@]+\.[^@]+", text) is not None
 
@@ -69,7 +70,7 @@ async def scan_link_with_virustotal(link: str):
         )
         return report_response.json() if report_response.status_code == 200 else None
 
-# Formatters
+# Format response for emails
 def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
     domain_info = vt_data.get("data", {}).get("attributes", {})
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
@@ -77,6 +78,7 @@ def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
     return f"{color}Status: {risk}</span>"
 
+# Format response for URLs
 def format_link_report(scan: dict) -> str:
     stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
     harmless = stats.get("harmless", 0)
@@ -89,7 +91,6 @@ def format_link_report(scan: dict) -> str:
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
     return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
 
-# Main API Route
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -115,7 +116,6 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-    # GEMINI MODE: fallback for regular prompts
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -132,3 +132,16 @@ async def ask_ai(req: PromptRequest):
             return {"response": output}
         else:
             return {"response": "Gemini API failed. Please try again."}
+
+@app.post("/api/chat")
+async def alias_chat_route(req: dict):
+    prompt = req.get("message", "").strip()
+    mode = req.get("mode", "").strip().lower()
+    lang = req.get("lang", "").strip().lower()
+
+    # Map frontend mode
+    if mode == "scan":
+        mode = "email/link scanner"
+
+    proxy_req = PromptRequest(prompt=prompt, mode=mode, language=lang)
+    return await ask_ai(proxy_req)
