@@ -145,4 +145,3 @@ async def alias_chat_route(req: dict):
 
     proxy_req = PromptRequest(prompt=prompt, mode=mode, language=lang)
     return await ask_ai(proxy_req)
-
