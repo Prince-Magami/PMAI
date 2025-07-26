@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 # Load environment variables
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
+IPQS_API_KEY = os.getenv("IPQS_API_KEY")  # 👈 Use this instead of VIRUSTOTAL_API_KEY
 
 # FastAPI setup
 app = FastAPI()
@@ -23,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Request body model
+# Request model
 class PromptRequest(BaseModel):
     prompt: str
     mode: str
@@ -48,53 +48,37 @@ def validate_email_mx(email: str) -> bool:
     except Exception:
         return False
 
-# ✅ Correct VirusTotal scan logic (submit + use returned ID)
-async def scan_link_with_virustotal(link: str):
-    headers = {
-        "x-apikey": VIRUSTOTAL_API_KEY,
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+# 🔁 IPQS replaces VirusTotal for both email + URL
+async def scan_link_with_ipqs(link: str):
+    url = f"https://ipqualityscore.com/api/json/url/{IPQS_API_KEY}/{link}"
     async with httpx.AsyncClient() as client:
-        submit_response = await client.post(
-            "https://www.virustotal.com/api/v3/urls",
-            headers=headers,
-            data=f"url={link}"
-        )
-        if submit_response.status_code != 200:
-            return None
+        response = await client.get(url)
+        return response.json() if response.status_code == 200 else None
 
-        url_id = submit_response.json().get("data", {}).get("id")
-        if not url_id:
-            return None
+async def scan_email_with_ipqs(email: str):
+    url = f"https://ipqualityscore.com/api/json/email/{IPQS_API_KEY}/{email}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.json() if response.status_code == 200 else None
 
-        report_response = await client.get(
-            f"https://www.virustotal.com/api/v3/urls/{url_id}",
-            headers=headers
-        )
-        return report_response.json() if report_response.status_code == 200 else None
-
-# Format email analysis
-def format_email_report(email: str, valid_mx: bool, vt_data: dict) -> str:
-    domain_info = vt_data.get("data", {}).get("attributes", {})
-    malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
-    risk = "High Risk" if malicious > 0 or not valid_mx else "Safe"
+# Formatters (unchanged)
+def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
+    fraud_score = ipqs_data.get("fraud_score", 0)
+    valid = ipqs_data.get("valid", False)
+    spam = ipqs_data.get("spamtrap_score", 0)
+    risk = "High Risk" if fraud_score >= 75 or not valid_mx or not valid else "Safe"
     color = "<span style='color:red'>" if risk == "High Risk" else "<span style='color:green'>"
     return f"{color}Status: {risk}</span>"
 
-# Format URL scan analysis
 def format_link_report(scan: dict) -> str:
-    stats = scan.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
-    harmless = stats.get("harmless", 0)
-    malicious = stats.get("malicious", 0)
-    suspicious = stats.get("suspicious", 0)
-    undetected = stats.get("undetected", 0)
-    total = harmless + malicious + suspicious + undetected
-    trust_score = round((harmless / total) * 100) if total > 0 else 0
+    risk_score = scan.get("risk_score", 0)
+    unsafe = scan.get("unsafe", False)
+    trust_score = 100 - risk_score
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
     return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
 
-# Core route
+# Main AI endpoint
 @app.post("/ask")
 async def ask_ai(req: PromptRequest):
     prompt = req.prompt.strip()
@@ -102,14 +86,13 @@ async def ask_ai(req: PromptRequest):
 
     if mode == "email/link scanner":
         if is_email(prompt):
-            domain = prompt.split("@")[1]
-            vt_result = await scan_link_with_virustotal(f"http://{domain}")
+            ipqs_result = await scan_email_with_ipqs(prompt)
             valid_mx = validate_email_mx(prompt)
-            return {"response": format_email_report(prompt, valid_mx, vt_result)}
+            return {"response": format_email_report(prompt, valid_mx, ipqs_result)}
 
         elif is_url(prompt):
             clean_url = extract_domain(prompt)
-            scan_result = await scan_link_with_virustotal(clean_url)
+            scan_result = await scan_link_with_ipqs(clean_url)
             if scan_result:
                 return {"response": format_link_report(scan_result)}
             else:
@@ -120,7 +103,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Please enter a valid email or URL."}
 
-    # Fallback to Gemini AI for general prompts
+    # Gemini Fallback
     headers = {
         "Authorization": f"Bearer {GEMINI_API_KEY}",
         "Content-Type": "application/json"
@@ -138,7 +121,7 @@ async def ask_ai(req: PromptRequest):
         else:
             return {"response": "Gemini API failed. Please try again."}
 
-# Frontend alias route
+# Alias route for frontend
 @app.post("/api/chat")
 async def alias_chat_route(req: dict):
     prompt = req.get("message", "").strip()
