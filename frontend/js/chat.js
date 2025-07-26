@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const API_BASE = 'https://pmai-pm.onrender.com';
 
-  // Static flashcards for immediate display
   const staticFlashcards = {
     edu: [
       "Break study time into chunks (Pomodoro).",
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ]
   };
 
-  // Fetch AI-generated flashcards
   async function fetchFlashcards(mode) {
     try {
       const res = await fetch(`${API_BASE}/api/flashcards?mode=${mode}`);
@@ -40,13 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   async function showFlashcards(mode) {
     flashcardsContainer.innerHTML = "";
     flashcardSection.style.display = "block";
     eduLinksContainer.style.display = mode === "edu" ? "block" : "none";
 
-  
     const picked = new Set();
     while (picked.size < 3) {
       const card = staticFlashcards[mode][Math.floor(Math.random() * staticFlashcards[mode].length)];
@@ -58,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
         picked.add(card);
       }
     }
-
 
     setTimeout(async () => {
       const aiCards = await fetchFlashcards(mode);
@@ -73,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
- 
   function hideFlashcards() {
     flashcardSection.style.display = "none";
     eduLinksContainer.style.display = "none";
@@ -98,9 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   modeSelect.addEventListener("change", updatePlaceholder);
   updatePlaceholder();
-
   chatInput.addEventListener("focus", hideFlashcards);
-
 
   chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -127,16 +119,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) throw new Error("Response not OK");
 
-const data = await res.json();
-let reply;
+      const data = await res.json();
+      let reply;
 
-if (mode === 'scan') {
-  reply = formatScannerReply(data.response || "Scan failed.");
-} else {
-  reply = data.reply || "No response from AI.";
-}
+      if (mode === 'scan') {
+        reply = formatScannerReply(data.response || "Scan failed.");
+      } else {
+        reply = data.reply || "No response from AI.";
+      }
 
-appendMessage('bot', reply);
+      appendMessage('bot', reply);
 
     } catch (err) {
       console.error("Error from API:", err);
@@ -149,7 +141,6 @@ appendMessage('bot', reply);
     }
   });
 
-  // Add message to chat window
   function appendMessage(sender, text) {
     const msg = document.createElement("div");
     msg.classList.add("message", sender);
@@ -158,25 +149,21 @@ appendMessage('bot', reply);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
 
+  // ✅ UPDATED formatScannerReply with correct parsing
+  function formatScannerReply(text) {
+    if (!text || text.includes("Scan failed") || text.includes("no result")) {
+      return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
+    }
 
-function formatScannerReply(text) {
-  if (!text || text.includes("Scan failed") || text.includes("no result")) {
-    return `<span style="color:red">Scan failed or could not analyze this link. It may be too new, private, or malformed.</span>`;
+    const statusMatch = text.match(/Status:\s*([^<]+)/i);
+    const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
+
+    const status = statusMatch ? statusMatch[1].trim() : "Unknown";
+    const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
+
+    return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
   }
 
-  // Extract from span-wrapped response
-  const statusMatch = text.match(/Status:\s*([^<]+)/i);
-  const trustMatch = text.match(/Trust Score:\s*(\d+)%/i);
-
-  const status = statusMatch ? statusMatch[1].trim() : "Unknown";
-  const score = trustMatch ? parseInt(trustMatch[1]) : "N/A";
-
-  return `<b>Status:</b> ${status}<br><b>Trust Score:</b> ${score}%`;
-}
-
-
-
-  // Allow Enter to send
   chatInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
