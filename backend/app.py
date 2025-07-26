@@ -86,10 +86,15 @@ def format_email_report(email: str, valid_mx: bool, ipqs_data: dict) -> str:
 
 def format_link_report(scan: dict) -> str:
     risk_score = scan.get("risk_score", 0)
+    if risk_score is None:
+        risk_score = 0
+
     trust_score = 100 - risk_score
     status = "Safe" if trust_score >= 80 else "Moderate Risk" if trust_score >= 50 else "Not Safe"
     color = "<span style='color:green'>" if status == "Safe" else "<span style='color:red'>"
+
     return f"{color}Status: {status}<br>Trust Score: {trust_score}%</span>"
+
 
 # Main AI logic
 @app.post("/ask")
