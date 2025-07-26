@@ -1,6 +1,9 @@
+# ✅ Full FastAPI Code: Gemini for chat, VirusTotal for link scan, DNS-based email validation
+
 import os
 import re
 import httpx
+import dns.resolver
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -11,7 +14,6 @@ load_dotenv()
 # Load API Keys from environment
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
-HUNTER_API_KEY = os.getenv("HUNTER_API_KEY")
 
 app = FastAPI()
 
@@ -57,28 +59,27 @@ async def scan_link_with_virustotal(link: str):
         )
         return report_response.json() if report_response.status_code == 200 else None
 
-async def validate_email_with_hunter(email: str):
-    url = f"https://api.hunter.io/v2/email-verifier?email={email}&api_key={HUNTER_API_KEY}"
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        return response.json() if response.status_code == 200 else None
+def validate_email_mx(email: str):
+    domain = email.split('@')[-1]
+    try:
+        dns.resolver.resolve(domain, 'MX')
+        return True
+    except Exception:
+        return False
 
-def format_email_report(email: str, hunter_data: dict, vt_data: dict):
-    score = hunter_data.get("data", {}).get("score", "Unknown")
-    result = hunter_data.get("data", {}).get("result", "Unknown")
+def format_email_report(email: str, valid_mx: bool, vt_data: dict):
     domain = email.split("@")[1]
     domain_info = vt_data.get("data", {}).get("attributes", {})
     malicious = domain_info.get("last_analysis_stats", {}).get("malicious", 0)
 
-    risk = "High Risk" if malicious > 0 or result == "undeliverable" else "Safe"
+    risk = "High Risk" if malicious > 0 or not valid_mx else "Safe"
 
     return f"""
 EMAIL SCAN REPORT
 ------------------
 Email: {email}
 
-Hunter Verification: {result.upper()}
-Score: {score}/100
+DNS MX Check: {'✅ MX records found' if valid_mx else '❌ No MX records (invalid domain)'}
 VirusTotal Domain Threats: {malicious}
 
 Status: {risk}
@@ -118,12 +119,12 @@ async def ask_ai(req: PromptRequest):
         if is_email(prompt):
             domain = prompt.split("@")[1]
             vt_domain_scan = await scan_link_with_virustotal(f"http://{domain}")
-            hunter_result = await validate_email_with_hunter(prompt)
+            valid_mx = validate_email_mx(prompt)
 
-            if vt_domain_scan and hunter_result:
-                return {"response": format_email_report(prompt, hunter_result, vt_domain_scan)}
+            if vt_domain_scan:
+                return {"response": format_email_report(prompt, valid_mx, vt_domain_scan)}
             else:
-                return {"response": "Unable to scan email at the moment."}
+                return {"response": "Unable to scan email domain at the moment."}
 
         elif prompt.startswith("http://") or prompt.startswith("https://"):
             scan = await scan_link_with_virustotal(prompt)
